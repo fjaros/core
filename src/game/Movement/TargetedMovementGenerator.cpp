@@ -396,11 +396,7 @@ bool TargetedMovementGeneratorMedium<T, D>::TargetWithinBoundsPercentDistance(T 
         (target->GetObjectBoundingRadius() + owner.GetObjectBoundingRadius());
     radius *= pct;
 
-    float dx = target->GetPositionX() - owner.GetPositionX();
-    float dy = target->GetPositionY() - owner.GetPositionY();
-    float dz = target->GetPositionZ() - owner.GetPositionZ();
-
-    return dx * dx + dy * dy + dz * dz < radius * radius;
+    return owner.GetDistanceSqr(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ()) < std::min(radius, 0.5f);
 }
 
 template<class T, typename D>
