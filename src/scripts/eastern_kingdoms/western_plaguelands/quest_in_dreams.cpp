@@ -1106,6 +1106,7 @@ void npc_taelanAI::ResetCreature()
     m_isDead = false;
     m_killedCavaliers = false;
     m_mountPhase = false;
+    m_canFail = true;
 
     m_lCavaliersGUID.clear();
 
@@ -1150,8 +1151,9 @@ void npc_taelanAI::EnterEvadeMode()
 void npc_taelanAI::JustDied(Unit* pKiller)
 {
     m_creature->SetHomePosition(0, 0, 0, 0);
-
-    npc_escortAI::JustDied(pKiller);
+    
+    if (m_canFail)
+        npc_escortAI::JustDied(pKiller);
 }
 
 void npc_taelanAI::WaypointReached(uint32 uiPointId)
@@ -1159,6 +1161,7 @@ void npc_taelanAI::WaypointReached(uint32 uiPointId)
     switch (uiPointId)
     {
         case 0: // spawn point: after the quest is taken
+            m_canFail = true;
             DoScriptText(SAY_TAELAN_1, m_creature);
             SetEscortPaused(true);
             m_uiEventTimer = 3000;
@@ -1170,6 +1173,7 @@ void npc_taelanAI::WaypointReached(uint32 uiPointId)
             m_uiEventCount = 5;
             break;
         case 30: // final point: tower reached
+            m_canFail = false;
             SetEscortPaused(true);
             m_uiEventTimer = 2000;
             m_uiEventCount = 6;

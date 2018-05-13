@@ -318,6 +318,7 @@ private:
     
     bool    m_killedCavaliers;
     bool    m_mountPhase;
+    bool    m_canFail;
 };
 
 /*######
