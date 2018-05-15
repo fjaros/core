@@ -290,7 +290,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "fly",            SEC_MODERATOR_CONF,  false, &ChatHandler::HandleGMFlyCommand,               "", nullptr },
         { NODE, "ingame",         SEC_MODERATOR_CONF,         true,  &ChatHandler::HandleGMListIngameCommand,        "", nullptr },
         { NODE, "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
-        { NODE, "visible",        SEC_GAMEMASTER,      false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
+        { NODE, "visible",        SEC_MODERATOR,      false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
         { NODE, "options",        SEC_DEVELOPPER,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
         { NODE, "setview",        SEC_MODERATOR_CONF,      false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
         { NODE, "",               SEC_MODERATOR,      false, &ChatHandler::HandleGMCommand,                  "", nullptr },
