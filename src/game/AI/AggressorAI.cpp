@@ -85,6 +85,11 @@ AggressorAI::AttackStart(Unit *u)
 {
     if (!u)
         return;
+    
+    if (m_creature->IsInEvadeMode())
+    {
+        return;
+    }
 
     if (m_creature->Attack(u, true))
     {
