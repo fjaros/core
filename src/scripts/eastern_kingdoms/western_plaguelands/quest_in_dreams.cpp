@@ -1150,7 +1150,7 @@ void npc_taelanAI::EnterEvadeMode()
 
 void npc_taelanAI::JustDied(Unit* pKiller)
 {
-    m_creature->SetHomePosition(0, 0, 0, 0);
+    m_creature->SetHomePosition(2942.58f, -1390.09f, 167.421f, 4.2586f);
     
     if (m_canFail)
         npc_escortAI::JustDied(pKiller);
