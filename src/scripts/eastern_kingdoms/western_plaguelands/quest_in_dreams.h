@@ -282,6 +282,7 @@ struct npc_taelanAI : npc_escortAI
     void ResetCreature() override;
     void EnterEvadeMode() override;
     void JustDied(Unit* /*pKiller*/) override;
+    void JustRespawned() override;
     void WaypointReached(uint32 uiPointId) override;
     bool CavaliersAreDead();
     static bool IsCavalierNear(uint32 counter);

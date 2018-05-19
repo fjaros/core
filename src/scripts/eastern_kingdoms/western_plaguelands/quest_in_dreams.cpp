@@ -138,7 +138,10 @@ void npc_tirion_fordring_in_dreamsAI::UpdateEscortAI(const uint32 uiDiff)
             {
                 m_creature->Unmount();
                 m_creature->GetMotionMaster()->Clear();
-                m_creature->GetMotionMaster()->MovePoint(99, pTaelan->GetPositionX()-2.0f, pTaelan->GetPositionY()-2.0f, pTaelan->GetPositionZ(), MOVE_PATHFINDING);
+                if (m_creature->GetDistance(pTaelan) < 50.0f)
+                    m_creature->GetMotionMaster()->MovePoint(99, pTaelan->GetPositionX()-2.0f, pTaelan->GetPositionY()-2.0f, pTaelan->GetPositionZ(), MOVE_PATHFINDING);
+                else
+                    m_creature->GetMotionMaster()->MovePoint(99, 2669.276f, -1903.254f, 65.72f, MOVE_PATHFINDING);
                 m_uiEventTimer = 3000;
             }            
             break;
@@ -1156,6 +1159,14 @@ void npc_taelanAI::JustDied(Unit* pKiller)
         npc_escortAI::JustDied(pKiller);
 }
 
+void npc_taelanAI::JustRespawned()
+{
+    m_creature->SetHomePosition(2942.58f, -1390.09f, 167.421f, 4.2586f);
+    m_creature->NearTeleportTo(2942.58f, -1390.09f, 167.421f, 4.2586f);
+    npc_escortAI::JustRespawned();
+    npc_taelanAI::ResetCreature();
+}
+
 void npc_taelanAI::WaypointReached(uint32 uiPointId)
 {
     switch (uiPointId)
@@ -1433,7 +1444,32 @@ void npc_taelanAI::Event6FaceIsillien(const uint32 uiDiff)
 void npc_taelanAI::Event7CompleteQuest()
 {
     if (Player* pPlayer = GetPlayerForEscort())
-        pPlayer->GroupEventHappens(QUEST_IN_DREAMS, m_creature);          
+        pPlayer->GroupEventHappens(QUEST_IN_DREAMS, m_creature);
+
+    std::list<Player*> players_list;
+    GetPlayersWithinRange(players_list, 30.0f);
+    if (!players_list.empty())
+    {
+        if (Player* pPlayer = *players_list.begin())
+        {
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    Player* pGroupMember = itr->getSource();
+                    if (pGroupMember && (pGroupMember->GetQuestStatus(QUEST_IN_DREAMS) == QUEST_STATUS_INCOMPLETE))
+                        pGroupMember->FullQuestComplete(QUEST_IN_DREAMS);
+                }
+            }
+        }
+    }
+
+    if (auto pTirion = m_pInterface->GetCreature(m_creature, INDEX_TIRION))
+    {
+        static ScriptInfo si;
+        si.command = SCRIPT_COMMAND_DESPAWN_CREATURE;
+        m_creature->GetMap()->ScriptCommandStart(si, 40, pTirion, pTirion);
+    }
     m_uiEventTimer = 90000;
     m_uiEventCount = 8;
 }
