@@ -4614,6 +4614,10 @@ void SpellMgr::LoadSpells()
         //spell->RequiredAuraVision = fields[171].GetUInt32();
         spell->Custom = 0;
 
+        // Furios Howl
+        if ((spell->SpellIconID == 1573) && (spell->SpellVisual == 7299) && !(spell->AuraInterruptFlags & AURA_INTERRUPT_FLAG_MELEE_ATTACK))
+            spell->AuraInterruptFlags |= AURA_INTERRUPT_FLAG_MELEE_ATTACK;
+
         spell->InitCachedValues();
         mSpellEntryMap[spellId] = spell;
 
