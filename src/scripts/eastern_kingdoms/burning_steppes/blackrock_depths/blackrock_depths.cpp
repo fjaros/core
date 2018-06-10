@@ -450,9 +450,9 @@ struct npc_grimstoneAI : public npc_escortAI
                         DoGate(DATA_ARENA4, GO_STATE_ACTIVE);
 
                         std::list<Unit*> targets;
-                        MaNGOS::AnyUnitInObjectRangeCheck u_check(m_creature, 70.0f);
+                        MaNGOS::AnyUnitInObjectRangeCheck u_check(m_creature, 80.0f);
                         MaNGOS::UnitListSearcher<MaNGOS::AnyUnitInObjectRangeCheck> searcher(targets, u_check);
-                        Cell::VisitAllObjects(m_creature, searcher, 70.0f);
+                        Cell::VisitAllObjects(m_creature, searcher, 80.0f);
                         for (std::list<Unit*>::iterator iter = targets.begin(); iter != targets.end(); ++iter)
                         {
                             Unit* target = *iter;
