@@ -297,6 +297,7 @@ void npc_tirion_fordring_in_dreamsAI::UpdateEscortAI(const uint32 uiDiff)
 
 void npc_tirion_fordring_in_dreamsAI::JustDied(Unit* /*pKiller*/)
 {
+    printf("tirion just died");
     FailEscort();
 }
 
@@ -753,6 +754,30 @@ void npc_isillienAI::Event6TirionArrival(const uint32 uiDiff)
     }
 }
 
+void npc_isillienAI::JustDied(Unit* /*pKiller*/)
+{
+    printf("isillien just died");
+    std::list<Player*> players_list;
+    GetPlayersWithinRange(players_list, 30.0f);
+    if (!players_list.empty())
+    {
+        for (auto pPlayer : players_list)
+        {
+            printf("CompleteQuest In Dreams for %s.\n", pPlayer->GetName());
+            pPlayer->FullQuestComplete(QUEST_IN_DREAMS);
+            if (Group* pGroup = pPlayer->GetGroup())
+            {
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    Player* pGroupMember = itr->getSource();
+                    if (pGroupMember && (pGroupMember->GetQuestStatus(QUEST_IN_DREAMS) == QUEST_STATUS_INCOMPLETE))
+                        pGroupMember->FullQuestComplete(QUEST_IN_DREAMS);
+                }
+            }
+        }
+    }
+}
+
 void npc_isillienAI::Event7FightTirion(const uint32 uiDiff)
 {
     switch (m_uiSubEventCount)
@@ -1153,8 +1178,9 @@ void npc_taelanAI::EnterEvadeMode()
 
 void npc_taelanAI::JustDied(Unit* pKiller)
 {
+    printf("taelan just died");
     m_creature->SetHomePosition(2942.58f, -1390.09f, 167.421f, 4.2586f);
-    
+    m_teleported = false;
     if (m_canFail)
         npc_escortAI::JustDied(pKiller);
 }
@@ -1450,7 +1476,7 @@ void npc_taelanAI::Event7CompleteQuest()
     GetPlayersWithinRange(players_list, 30.0f);
     if (!players_list.empty())
     {
-        if (Player* pPlayer = *players_list.begin())
+        for (auto pPlayer : players_list)
         {
             if (Group* pGroup = pPlayer->GetGroup())
             {
@@ -1478,6 +1504,24 @@ void npc_taelanAI::Event8GraceShutdown(const uint32 uiDiff)
 {
     if (m_uiEventTimer < uiDiff)
     {
+        std::list<Player*> players_list;
+        GetPlayersWithinRange(players_list, 30.0f);
+        if (!players_list.empty())
+        {
+            for (auto pPlayer : players_list)
+            {
+                if (Group* pGroup = pPlayer->GetGroup())
+                {
+                    for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                    {
+                        Player* pGroupMember = itr->getSource();
+                        if (pGroupMember && (pGroupMember->GetQuestStatus(QUEST_IN_DREAMS) == QUEST_STATUS_INCOMPLETE))
+                            pGroupMember->FullQuestComplete(QUEST_IN_DREAMS);
+                    }
+                }
+            }
+        }
+
         if (auto pTirion = m_pInterface->GetCreature(m_creature, INDEX_TIRION))
         {
             pTirion->DisappearAndDie();
@@ -1562,6 +1606,20 @@ void npc_taelanAI::DoHeal(const uint32 uiDiff)
         else
             m_uiHolyLightTimer -= uiDiff;
     }
+}
+
+void npc_taelanAI::UpdateAI(const uint32 uiDiff)
+{
+    if (!m_teleported && m_creature->isAlive() && !m_creature->isInCombat())
+    {
+        m_creature->SetActiveObjectState(true);
+        printf("taelan just spawned - calling JustRespawned");
+        npc_taelanAI::JustRespawned();
+        printf("taelan just spawned - MonsterMoveWithSpeed");
+        m_creature->MonsterMoveWithSpeed(2942.58f, -1390.09f, 167.421f, 4.2586f, 50, MOVE_FORCE_DESTINATION);
+        m_teleported = true;
+    }
+    npc_escortAI::UpdateAI(uiDiff);
 }
 
 void npc_taelanAI::UpdateEscortAI(const uint32 uiDiff)

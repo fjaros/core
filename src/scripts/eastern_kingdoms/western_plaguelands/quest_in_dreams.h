@@ -215,6 +215,7 @@ struct npc_isillienAI : npc_escortAI
     void UpdateEscortAI(const uint32 uiDiff) override;
     static void GroupRemoveDisguise(Player* player);
     void FailEscort() const;
+    void JustDied(Unit* /*pKiller*/) override;
 
     bool m_isTirionHere;
     std::shared_ptr<InDreamsInterface> m_pInterface;
@@ -301,8 +302,9 @@ struct npc_taelanAI : npc_escortAI
     void DoAttack(const uint32 uiDiff);
     void DoHeal(const uint32 uiDiff);
     void UpdateEscortAI(const uint32 uiDiff) override;
-
+    void UpdateAI(const uint32 uiDiff) override;
     bool    m_isDead;
+    bool m_teleported = false;
     std::shared_ptr<InDreamsInterface> m_pInterface;
 
 private:
