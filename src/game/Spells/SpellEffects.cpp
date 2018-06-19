@@ -846,6 +846,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     ((Creature*)unitTarget)->SetDeathState(JUST_ALIVED);
                     return;
                 }
+                case 9204:                                  // Hate to Zero
+                {
+                    if (!unitTarget)
+                        return;
+
+                    m_caster->getThreatManager().modifyThreatPercent(unitTarget, -100);
+                    return;
+                }
                 case 9976:                                  // Polly Eats the E.C.A.C.
                 {
                     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_UNIT)
@@ -1374,7 +1382,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
                 case 26626:                                 // Mana Burn Area
                 {
-                    if (unitTarget->GetTypeId() != TYPEID_UNIT || unitTarget->getPowerType() != POWER_MANA)
+                    if (unitTarget->getPowerType() != POWER_MANA)
                         return;
 
                     m_caster->CastSpell(unitTarget, 25779, true);
@@ -2450,7 +2458,7 @@ void Spell::EffectHealthLeech(SpellEffectIndex effIndex)
         modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_MULTIPLE_VALUE, healMultiplier);
 
     // get max possible damage, don't count overkill for heal
-    if (damage > unitTarget->GetHealth())
+    if (damage > static_cast<int32>(unitTarget->GetHealth()))
         damage = unitTarget->GetHealth();
 
     if (m_caster->isAlive())
@@ -3566,7 +3574,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
                             pCreature->MonsterSay(-1900171);
                             pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(false);
+                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
                         break;
                     case 976: // Tanaris
@@ -3575,7 +3583,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
                             pCreature->MonsterTextEmote(-1900172);
                             pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(false);
+                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
                         break;
                     case 2255: // Winterspring
@@ -3584,7 +3592,7 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
                             spawnCreature->GetMotionMaster()->MoveFollow(pCreature, 0.6f, M_PI_F);
                             pCreature->MonsterTextEmote(-1900173);
                             pCreature->SetWalk(false);
-                            pCreature->GetMotionMaster()->MoveWaypoint(false);
+                            pCreature->GetMotionMaster()->MoveWaypoint(0, 0, 0, 0, 0, false);
                         }
                         break;
                 }
@@ -4901,6 +4909,23 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 27686:                                 // Teleport to Razelikh (GROUP)
+                {
+                    if (Player* pPlayerTarget = ToPlayer(unitTarget))
+                    {
+                        if (Group* pGroup = pPlayerTarget->GetGroup())
+                        {
+                            uint32 zone_id = pPlayerTarget->GetCachedZoneId();
+                            for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                Player* pGroupMember = itr->getSource();
+                                if (pGroupMember && pGroupMember->IsWithinDistInMap(m_caster, 20.0f))
+                                    pGroupMember->CastSpell(pGroupMember, 13142, true); // Teleport to Razelikh
+                            }
+                        }
+                    }
+                    return;
+                }
             }
             break;
         }
@@ -5863,7 +5888,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
 
 void Spell::EffectKnockBack(SpellEffectIndex eff_idx)
 {
-    if (!unitTarget)
+    if (!unitTarget || unitTarget->IsTaxiFlying())
         return;
 
     // remove Dream Fog Sleep aura to let target be launched

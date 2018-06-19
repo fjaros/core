@@ -177,7 +177,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f),
     m_HomeX(0.0f), m_HomeY(0.0f), m_HomeZ(0.0f), m_HomeOrientation(0.0f), m_reactState(REACT_PASSIVE),
     m_CombatDistance(0.0f), _lastDamageTakenForEvade(0), _playerDamageTaken(0), _nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
-    m_AI_InitializeOnRespawn(false), m_callForHelpDist(5.0f), m_combatWithZoneState(false)
+    m_AI_InitializeOnRespawn(false), m_callForHelpDist(5.0f), m_combatWithZoneState(false), m_startwaypoint(0), m_mountId(0)
 {
     m_regenTimer = 200;
     m_valuesCount = UNIT_END;
@@ -345,13 +345,18 @@ bool Creature::InitEntry(uint32 Entry, Team team, CreatureData const* data /*=NU
     }
 
     SetName(normalInfo->Name);                              // at normal entry always
-
+#if SUPPORTED_CLIENT_BUILD >= CLIENT_BUILD_1_12_1
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
-
+#else
+    SetInt32Value(UNIT_MOD_CAST_SPEED, 0);
+#endif
     // update speed for the new CreatureInfo base speed mods
     UpdateSpeed(MOVE_WALK, false);
     UpdateSpeed(MOVE_RUN,  false);
     SetFly(CanFly());
+
+    if (data)
+        m_startwaypoint = data->currentwaypoint;
 
     // checked at loading
     m_defaultMovementType = MovementGeneratorType(cinfo->MovementType);
@@ -766,7 +771,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                                      GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE &&
                                      !HasDistanceCasterMovement() &&
                                      (!CanReachWithMeleeAttack(getVictim()) || !IsWithinLOSInMap(getVictim())) &&
-                                     !GetMotionMaster()->operator->()->IsReachable();
+                                     !GetMotionMaster()->GetCurrent()->IsReachable();
             // No evade mode for pets.
             if (unreachableTarget && GetCharmerOrOwnerGuid().IsPlayer())
                 unreachableTarget = false;
@@ -1951,18 +1956,9 @@ bool Creature::IsImmuneToSpell(SpellEntry const *spellInfo, bool castOnSelf)
             return true;
     }
 
-    // HACK! Bosses are immune to cast speed debuffs like Curse of Tongues
+    // HACK!
     if (IsWorldBoss())
     {
-        if (IsSpellHaveAura(spellInfo, SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK) && !IsPositiveSpell(spellInfo->Id))
-        {
-            if (GetCreatureInfo()->Entry != 15263 // The Prophet Skeram
-            && !(GetCreatureInfo()->Entry == 15953 && spellInfo->Id == 28732 )) // Grand Widow Faerlina can be hit by widows embrace
-            {
-                return true;
-            }
-        }
-
         if (spellInfo->IsFitToFamily<SPELLFAMILY_HUNTER, CF_HUNTER_SCORPID_STING>())
             return true;
 
@@ -2219,11 +2215,12 @@ void Creature::CallForHelp(float fRadius)
 
 bool Creature::CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction /*= true*/) const
 {
-    // we don't need help from zombies :)
     if (!isAlive())
         return false;
 
-    // we don't need help from non-combatant ;)
+    if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_ASSIST)
+        return false;
+
     if (GetCreatureInfo()->flags_extra & CREATURE_FLAG_EXTRA_NO_AGGRO)
         return false;
 
@@ -2398,8 +2395,11 @@ bool Creature::LoadCreatureAddon(bool reload)
     if (!cainfo)
         return false;
 
-    if (cainfo->mount != 0)
-        Mount(cainfo->mount);
+    if (!reload)
+        m_mountId = cainfo->mount;
+
+    if (m_mountId != 0)
+        Mount(m_mountId);
 
     if (cainfo->bytes1 != 0)
     {
@@ -3129,6 +3129,14 @@ void Creature::SetHomePosition(float x, float y, float z, float o)
     m_HomeOrientation = o;
 }
 
+void Creature::ResetHomePosition()
+{
+    if (CreatureData const *data = sObjectMgr.GetCreatureData(GetGUIDLow()))
+        SetHomePosition(data->posX, data->posY, data->posZ, data->orientation);
+    else if (IsTemporarySummon())
+        GetSummonPoint(m_HomeX, m_HomeY, m_HomeZ, m_HomeOrientation);
+}
+
 void Creature::OnLeaveCombat()
 {
     UpdateCombatState(false);
@@ -3425,7 +3433,7 @@ Unit* Creature::DoSelectLowestHpFriendly(float fRange, uint32 uiMinHPDiff, bool 
     MaNGOS::MostHPMissingInRangeCheck u_check(this, fRange, uiMinHPDiff, bPercent);
     MaNGOS::UnitListSearcher<MaNGOS::MostHPMissingInRangeCheck> searcher(targets, u_check);
 
-    Cell::VisitWorldObjects(this, searcher, fRange);
+    Cell::VisitAllObjects(this, searcher, fRange);
 
     // remove current target
     if (except)
@@ -3499,7 +3507,7 @@ SpellCastResult Creature::TryToCast(Unit* pTarget, const SpellEntry* pSpellInfo,
 
     // Can't cast while fleeing.
     if (GetMotionMaster()->GetCurrentMovementGeneratorType() == TIMED_FLEEING_MOTION_TYPE)
-        return SPELL_FAILED_NOT_WHILE_FATIGUED;
+        return SPELL_FAILED_FLEEING;
 
     // This spell is only used when target is in melee range.
     if ((uiCastFlags & CF_ONLY_IN_MELEE) && !CanReachWithMeleeAttack(pTarget))
@@ -3510,16 +3518,12 @@ SpellCastResult Creature::TryToCast(Unit* pTarget, const SpellEntry* pSpellInfo,
         return SPELL_FAILED_TOO_CLOSE;
 
     // This spell should only be cast when we cannot get into melee range.
-    if ((uiCastFlags & CF_TARGET_UNREACHABLE) && (CanReachWithMeleeAttack(pTarget) || (GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE) || !(hasUnitState(UNIT_STAT_NOT_MOVE) || !GetMotionMaster()->operator->()->IsReachable())))
+    if ((uiCastFlags & CF_TARGET_UNREACHABLE) && (CanReachWithMeleeAttack(pTarget) || (GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE) || !(hasUnitState(UNIT_STAT_NOT_MOVE) || !GetMotionMaster()->GetCurrent()->IsReachable())))
         return SPELL_FAILED_MOVING;
 
     // Custom checks
     if (!(uiCastFlags & CF_FORCE_CAST))
     {
-        // ToDo: Remove this check when checking for stuns is fixed in Spell.cpp
-        if (!(uiCastFlags & CF_TRIGGERED) && hasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL))
-            return SPELL_FAILED_PREVENTED_BY_MECHANIC;
-
         // If the spell requires to be behind the target.
         if (pSpellInfo->Custom & SPELL_CUSTOM_FROM_BEHIND && pTarget->HasInArc(M_PI_F, this))
             return SPELL_FAILED_UNIT_NOT_BEHIND;

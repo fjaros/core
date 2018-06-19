@@ -705,22 +705,37 @@ class MANGOS_DLL_SPEC PlayerTaxi
         bool LoadTaxiDestinationsFromString(const std::string& values, Team team);
         std::string SaveTaxiDestinationsToString() const;
 
-        void ClearTaxiDestinations() { m_TaxiDestinations.clear(); }
+        void ClearTaxiDestinations()
+        {
+            m_TaxiDestinations.clear();
+            m_taxiPath.clear();
+            m_discount = 1.0f;
+        }
         void AddTaxiDestination(uint32 dest) { m_TaxiDestinations.push_back(dest); }
+        void SetDiscount(float discount) { m_discount = discount; }
         uint32 GetTaxiSource() const { return m_TaxiDestinations.empty() ? 0 : m_TaxiDestinations.front(); }
         uint32 GetTaxiDestination() const { return m_TaxiDestinations.size() < 2 ? 0 : m_TaxiDestinations[1]; }
         uint32 GetCurrentTaxiPath() const;
+        uint32 GetCurrentTaxiCost() const;
         uint32 NextTaxiDestination()
         {
             m_TaxiDestinations.pop_front();
             return GetTaxiDestination();
+        };
+        TaxiPathNodeList const& GetTaxiPath() const { return m_taxiPath; };
+        void AddTaxiPathNode(TaxiPathNodeEntry const& entry)
+        {
+            m_taxiPath.resize(m_taxiPath.size() + 1);
+            m_taxiPath.set(m_taxiPath.size() - 1, &entry);
         }
         bool empty() const { return m_TaxiDestinations.empty(); }
 
         friend std::ostringstream& operator<< (std::ostringstream& ss, PlayerTaxi const& taxi);
     private:
+        float m_discount;
         TaxiMask m_taximask;
         std::deque<uint32> m_TaxiDestinations;
+        TaxiPathNodeList m_taxiPath;
 };
 
 std::ostringstream& operator<< (std::ostringstream& ss, PlayerTaxi const& taxi);
@@ -1181,7 +1196,7 @@ class MANGOS_DLL_SPEC Player final: public Unit
         Item* GetItemFromBuyBackSlot( uint32 slot );
         void RemoveItemFromBuyBackSlot( uint32 slot, bool del );
 
-        uint32 GetMaxKeyringSize() const { return KEYRING_SLOT_END-KEYRING_SLOT_START; }
+        uint32 GetMaxKeyringSize() const { return getLevel() < 40 ? 4 : (getLevel() < 50 ? 8 : 12); }
         void SendEquipError( InventoryResult msg, Item* pItem, Item *pItem2 = NULL, uint32 itemid = 0 ) const;
         void SendBuyError( BuyResult msg, Creature* pCreature, uint32 item, uint32 param );
         void SendSellError( SellResult msg, Creature* pCreature, ObjectGuid itemGuid, uint32 param );
