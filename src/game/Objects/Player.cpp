@@ -85,6 +85,9 @@
 #include "world/world_event_naxxramas.h"
 #include "world/world_event_wareffort.h"
 
+/* The Construct */
+#include "TheConstruct.h"
+
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
 #define PLAYER_SKILL_INDEX(x)       (PLAYER_SKILL_INFO_1_1 + ((x)*3))
@@ -3452,6 +3455,9 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
 
         if (skill_max_value < new_skill_max_value)
             skill_max_value =  new_skill_max_value;
+        
+        // The Construct - changed skill_value to be skill_max_value by default
+        skill_value = skill_max_value;
 
         SetSkill(spellLearnSkill->skill, skill_value, skill_max_value, spellLearnSkill->step);
     }
@@ -3481,7 +3487,7 @@ bool Player::addSpell(uint32 spell_id, bool active, bool learning, bool dependen
                         SetSkill(pSkill->id, 300, 300);
                         break;
                     case SKILL_RANGE_LEVEL:
-                        SetSkill(pSkill->id, 1, GetMaxSkillValueForLevel());
+                        SetSkill(pSkill->id, GetMaxSkillValueForLevel(), GetMaxSkillValueForLevel());
                         break;
                     case SKILL_RANGE_MONO:
                         SetSkill(pSkill->id, 1, 1);
@@ -16057,10 +16063,18 @@ void Player::SaveToDB(bool online, bool force)
 
     if (!IsBeingTeleported())
     {
-        uberInsert.addUInt32(GetMapId());
-        uberInsert.addFloat(finiteAlways(GetPositionX()));
-        uberInsert.addFloat(finiteAlways(GetPositionY()));
-        uberInsert.addFloat(finiteAlways(GetPositionZ()));
+        // ORGRIMMAR
+	if (HasAtLoginFlag(AT_LOGIN_FIRST) && GetTeam() == HORDE) {
+            uberInsert.addUInt32(1);
+            uberInsert.addFloat(1629.31);
+            uberInsert.addFloat(-4373.15);
+            uberInsert.addFloat(31.2099);
+	} else {
+            uberInsert.addUInt32(GetMapId());
+            uberInsert.addFloat(finiteAlways(GetPositionX()));
+            uberInsert.addFloat(finiteAlways(GetPositionY()));
+            uberInsert.addFloat(finiteAlways(GetPositionZ()));
+	}
         uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(GetOrientation())));
     }
     else
@@ -16073,7 +16087,15 @@ void Player::SaveToDB(bool online, bool force)
     }
 
     std::ostringstream ss;
-    ss << m_taxi;                                   // string with TaxiMaskSize numbers
+    if (HasAtLoginFlag(AT_LOGIN_FIRST)) {
+        if (GetTeam() == HORDE) {
+            ss << "830166528 315656872 56504 0 0 0 0 0";
+        } else {
+            ss << "3456411898 2148078929 49991 0 0 0 0 0";
+        }
+    } else {
+        ss << m_taxi;                                   // string with TaxiMaskSize numbers
+    }
     uberInsert.addString(ss);
 
     if (!IsInWorld())
@@ -16152,7 +16174,11 @@ void Player::SaveToDB(bool online, bool force)
 
     uberInsert.addUInt32(uint32(GetByteValue(PLAYER_FIELD_BYTES, 2)));
     // Nostalrius
-    uberInsert.addUInt32(GetAreaId());
+    if (HasAtLoginFlag(AT_LOGIN_FIRST) && GetTeam() == HORDE) {
+        uberInsert.addUInt32(1637);
+    } else {
+        uberInsert.addUInt32(GetAreaId());
+    }
     uberInsert.addUInt32(GetWorldMask());
     uberInsert.addUInt32(customFlags);
     uberInsert.Execute();
@@ -16170,6 +16196,10 @@ void Player::SaveToDB(bool online, bool force)
     // Systeme de phasing
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
     GetSession()->SaveTutorialsData();                      // changed only while character in game
+    
+    if (HasAtLoginFlag(AT_LOGIN_FIRST)) {
+        DoAtLogin(this);
+    }
 
     CharacterDatabase.CommitTransaction();
 

@@ -46,6 +46,7 @@ set (game_SRCS
 	SkillExtraItems.cpp
 	SocialMgr.cpp
 	StatSystem.cpp
+	TheConstruct.cpp
 	UnitAuraProcHandler.cpp
 	Weather.cpp
 	World.cpp
@@ -261,6 +262,7 @@ set (game_SRCS
 	SkillDiscovery.h
 	SkillExtraItems.h
 	SocialMgr.h
+	TheConstruct.h
 	UnitEvents.h
 	Weather.h
 	World.h
