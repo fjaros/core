@@ -9,7 +9,7 @@ These instructions are how to compile and run this MaNGOS fork on Linux, specifi
 3) Although we will use the source from this repo we need the game files for the server so need to download/transfer the latest Lights Hope repack on the server. Currently https://www.mediafire.com/file/75zphqhxss8fgny/Lights+Hope+bropack+v10.rar
 
 -- COMPILE:
-4) Clone this repo `git clone https://fjaros@bitbucket.org/fjaros/theconstruct.git`
+4) Clone this repo `git clone https://github.com/fjaros/core` 
 
 5) `cd theconstruct`
 
