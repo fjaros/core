@@ -2621,4 +2621,12 @@ enum TicketType
 // Used for some dynamic scaling systems, depending on total population
 #define BLIZZLIKE_REALM_POPULATION 2500
 
+inline char separator() {
+#ifdef _WIN32
+    return '\\';
+#else
+    return '/';
+#endif
+}
+
 #endif
