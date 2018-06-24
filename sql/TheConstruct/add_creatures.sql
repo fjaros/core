@@ -53,3 +53,6 @@ INSERT INTO `creature` (
     (14387,1,0,0,1624.19,-4406.23,13.8734,0.0729892,25,25,5,0,9298,2434,0,1,0,0,0,10),
     (16211,1,0,0,1514.31,-4402.55,18.7348,3.17547,25,25,5,0,42,0,0,0,0,0,0,10)
 ;
+
+/* Training dummy */
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=20000,maxhealth=20000,armor=0,RegenHealth=1,ScriptName='custom_npc_training_dummy' WHERE entry=1921;

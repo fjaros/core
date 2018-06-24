@@ -3894,9 +3894,15 @@ void Spell::EffectTameCreature(SpellEffectIndex /*eff_idx*/)
     // add to world
     pet->GetMap()->Add((Creature*)pet);
 
-    // visual effect for levelup
-    pet->SetUInt32Value(UNIT_FIELD_LEVEL, creatureTarget->getLevel());
-
+    /* The Construct */
+    // Set max level
+    pet->SetLevel(60);
+    // Set TP to level * (loyalty - 1)
+    pet->SetTP(pet->getLevel() * (pet->GetLoyaltyLevel() - 1));
+    // Set 1 million happiness (HAPPINESS_LEVEL_SIZE * 3)
+    pet->SetPower(POWER_HAPPINESS, HAPPINESS_LEVEL_SIZE * 3);
+    /* End The Construct */
+    
     // caster have pet now
     plr->SetPet(pet);
 

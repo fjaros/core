@@ -71,7 +71,21 @@ void DoAtLogin(Player *player) {
 		6991, // Feed pet
 		982, // Revive pet
 		883, // Call pet
-		2641 // Dismiss pet
+		2641, // Dismiss pet
+                // Pet Skills
+                7370, 26184, 26185, 26186, 26202, 28343, // Charge
+                17254, 17262, 17263, 17264, 17265, 17266, 17267, 17268, // Bite
+ 	 	2980, 2981, 2982, 3667, 2975, 2976, 2977, 3666, // Claw
+                24609, 24608, 24607, 24599, // Furious Howl
+ 	 	24845, 25013, 25014, 25015, 25016, 25017, // Lightning Breath
+                24451, 24454, 24455, // Prowl
+                24641, 24584, 24588, 24589, // Scorpid Poison
+ 	 	24424, 24580, 24581, 24582, // Screech
+                26065, // Shell shield
+                26094, 26189, 26190, // Thunderstomp
+                23100, 23111, 23112, // Dash
+                23146, 23149, 23150, // Dive
+                1747, 1748, 1749, 1750, 1751, 16698 // Cower
 	    };
 	    break;
 	case CLASS_MAGE:

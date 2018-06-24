@@ -991,10 +991,19 @@ struct npc_training_dummyAI : ScriptedAI
         }
     }
 
-    void DamageTaken(Unit* pWho, uint32& /*uiDamage*/) override
+    void DamageTaken(Unit* pWho, uint32& uiDamage) override
     {
         if (pWho)
             AddAttackerToList(pWho);
+        
+        /* The Construct */
+        // Heal to full if damage causes health drop below 10%
+        float healthRatioAfterDamage = 
+            ((float)m_creature->GetHealth() - uiDamage) / m_creature->GetMaxHealth();
+        
+        if (healthRatioAfterDamage < 0.1f) {
+            m_creature->ModifyHealth(m_creature->GetMaxHealth());
+        }
     }
 
     void SpellHit(Unit* pWho, const SpellEntry* /*pSpell*/) override
@@ -1033,10 +1042,6 @@ struct npc_training_dummyAI : ScriptedAI
             }
             else
                 m_uiCombatTimer -= diff;
-            
-            if (m_creature->GetHealthPercent() < 10.0f) {
-                m_creature->ModifyHealth(m_creature->GetMaxHealth());
-            }
         }
     }
 };
