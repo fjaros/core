@@ -1029,10 +1029,14 @@ struct npc_training_dummyAI : ScriptedAI
                 if (m_creature->getThreatManager().isThreatListEmpty())
                     EnterEvadeMode();
 
-                m_uiCombatTimer = 15000;
+                m_uiCombatTimer = 10000;
             }
             else
                 m_uiCombatTimer -= diff;
+            
+            if (m_creature->GetHealthPercent() < 10.0f) {
+                m_creature->ModifyHealth(m_creature->GetMaxHealth());
+            }
         }
     }
 };
