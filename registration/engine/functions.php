@@ -37,7 +37,7 @@ class Register{
         }
     }
     private function check_user_exist($username){
-        $sql = "SELECT COUNT(1) FROM account WHERE `username`=?";
+        $sql = "SELECT username FROM account WHERE `username`=?";
 	$con = $this->connect();
         if ($stmt = $con->prepare($sql)) {
             $stmt->bind_param("s", $username);
