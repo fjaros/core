@@ -6,7 +6,7 @@ These instructions are how to compile and run this MaNGOS fork on Linux, specifi
 2) Install updates, dependencies, and give it a good ole reboot after:
 `sudo apt-get update && sudo apt-get upgrade && sudo apt install build-essential cmake libace-dev libtbb-dev mariadb-server mariadb-client libmysqlclient-dev libssl1.0-dev unrar p7zip-full && sudo reboot`
 
-3) Although we will use the source from this repo we need the game files for the server so need to download/transfer the latest Lights Hope repack on the server. Currently https://www.mediafire.com/file/75zphqhxss8fgny/Lights+Hope+bropack+v10.rar
+3) Although we will use the source from this repo we need the game files for the server so need to download/transfer the latest Lights Hope repack on the server. Currently https://www.mediafire.com/file/is1uobq3fjcza1h/Lights+Hope+bropack+v11.rar
 
 -- COMPILE:
 4) Clone this repo `git clone https://github.com/fjaros/core` 
@@ -35,9 +35,9 @@ If you do not care to setup your mysql securely, you can just run:
 
 11) `cd MaNGOS/sql`
 
-12) `7z x FULL_WORLD_DB_09_05_2018.7z` - (or whatever the name may be)
+12) `7z x FULL_WORLD_DB_19_06_2018.7z` - (or whatever the name may be)
 
-13) `sudo mysql -uroot mangos < FULL_WORLD_DB_09_05_2018.sql` (or whatever you set the mysql user as)
+13) `sudo mysql -uroot mangos < FULL_WORLD_DB_19_06_2018.sql` (or whatever you set the mysql user as)
 
 14) `cd Base`
 
