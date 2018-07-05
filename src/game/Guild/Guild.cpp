@@ -429,6 +429,10 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
 {
     if (!guildMembersResult)
         return false;
+    
+    /* The Construct */
+    // Get current time
+    uint64 current_time = uint64(time(NULL));
 
     do
     {
@@ -484,6 +488,14 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
         if (!((1 << (newmember.Class - 1)) & CLASSMASK_ALL_PLAYABLE)) // can be at broken `class` field
         {
             sLog.outError("%s has a broken data in field `characters`.`class`, deleting him from guild!", newmember.guid.GetString().c_str());
+            CharacterDatabase.PExecute("DELETE FROM guild_member WHERE guid = '%u'", lowguid);
+            continue;
+        }
+        
+        /* The Construct */
+        // Delete members from guild not logged in in 7 days
+        if (current_time - newmember.LogoutTime > 604800) {
+            sLog.outError("%s has not logged in in 7 days, deleting him from guild!", newmember.guid.GetString().c_str());
             CharacterDatabase.PExecute("DELETE FROM guild_member WHERE guid = '%u'", lowguid);
             continue;
         }
