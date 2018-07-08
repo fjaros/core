@@ -4,6 +4,7 @@
 
 enum
 {
+    AGGRO_YELL = 5619,
     SAY_CHARGE = -2000001,
     SPELL_CHARGE = 24408
 };
@@ -26,6 +27,11 @@ struct boss_rhahkzorAI : public ScriptedAI
         m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
         m_chargeTarget = 0;
         m_alreadyCharged.clear();
+    }
+    
+    void Aggro(Unit* pWho)
+    {
+        DoScriptText(AGGRO_YELL, m_creature);
     }
     
     void UpdateAI(const uint32 diff)
@@ -64,7 +70,7 @@ struct boss_rhahkzorAI : public ScriptedAI
                         m_alreadyCharged.insert(pPlayer->GetGUID());
                 }
             }
-            m_uiCharge_Timer = urand(19000, 22000);
+            m_uiCharge_Timer = urand(18000, 22000);
             m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
             m_chargeTarget = 0;
         }
@@ -72,7 +78,12 @@ struct boss_rhahkzorAI : public ScriptedAI
             m_uiCharge_Timer -= diff;
         
         if (m_chargeTarget != 0) 
+        {
+            m_creature->StopMoving();
+            m_creature->AttackStop();
+            m_creature->SetTargetGuid(m_chargeTarget);
             m_creature->SetFacingToObject(m_creature->GetMap()->GetUnit(m_chargeTarget));
+        }
         else
             DoMeleeAttackIfReady();
     }
@@ -96,7 +107,7 @@ struct boss_rhahkzorAI : public ScriptedAI
             float t_angle = m_creature->GetAngle(potentialBlocker);
             float t_distance = m_creature->GetDistance2d(potentialBlocker);
             
-            if (t_distance < chargeDistance && abs(t_angle - chargeAngle) <= 0.25)
+            if (t_distance < chargeDistance && abs(t_angle - chargeAngle) <= 0.2)
                 return potentialBlocker;
         }
         
