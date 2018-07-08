@@ -4,31 +4,59 @@
 
 enum
 {
-
+    SAY_TERMINATING = -2000002
 };
 
 struct boss_sneeds_shredderAI : public ScriptedAI
 {
+    uint32 m_base_Attack_Timer;
+    uint32 m_Terminating_Timer;
+    bool m_isTerminating;
+    uint32 m_Recharging_Timer;
     
     boss_sneeds_shredderAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_base_Attack_Timer = m_creature->getAttackTimer(BASE_ATTACK);
+
         Reset();
     }
     
     void Reset()
     {
-
-    }
-    
-    void Aggro(Unit* pWho)
-    {
-        DoScriptText(AGGRO_YELL, m_creature);
+        m_Terminating_Timer = 10000;
+        m_isTerminating = false;
+        m_Recharging_Timer = 0;
+        m_creature->setAttackTimer(BASE_ATTACK, m_base_Attack_Timer);
     }
     
     void UpdateAI(const uint32 diff)
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+        
+        if (m_Terminating_Timer < diff)
+        {
+            DoScriptText(SAY_TERMINATING, m_creature);
+            m_creature->setAttackTimer(BASE_ATTACK, 500);
+            m_isTerminating = true;
+            m_Recharging_Timer = 2500;
+        }
+        else
+            m_Terminating_Timer -= diff;
+        
+        if (m_isTerminating)
+        {
+            if (m_Recharging_Timer < diff)
+            {
+                m_creature->setAttackTimer(BASE_ATTACK, m_base_Attack_Timer);
+                m_Terminating_Timer = urand(12000, 15000);
+                m_isTerminating = false;
+            }
+            else
+                m_Recharging_Timer -= diff;
+        }
+        
+        DoMeleeAttackIfReady();
     }
 };
 
