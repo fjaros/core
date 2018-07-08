@@ -4,7 +4,8 @@
 
 enum
 {
-    SAY_CHARGE = -2000001
+    SAY_CHARGE = -2000001,
+    SPELL_CHARGE = 24408
 };
 
 struct boss_rhahkzorAI : public ScriptedAI
@@ -24,11 +25,12 @@ struct boss_rhahkzorAI : public ScriptedAI
         m_uiCharge_Timer = 19000;
         m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
         m_chargeTarget = 0;
+        m_alreadyCharged.clear();
     }
     
     void UpdateAI(const uint32 diff)
     {
-        if (!m_creature->SelectHostileTarget())
+        if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
         
         if (m_uiSayCharge_Timer < diff) 
@@ -39,7 +41,7 @@ struct boss_rhahkzorAI : public ScriptedAI
                 {
                     DoScriptText(SAY_CHARGE, m_creature, pTarget);
                     m_chargeTarget = pTarget->GetGUID();
-                    m_uiSayCharge_Timer = 17000;
+                    m_uiSayCharge_Timer = 20000;
                 }
             }
         }
@@ -52,7 +54,7 @@ struct boss_rhahkzorAI : public ScriptedAI
             {
                 if (Player* pPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
-                    DoCastSpellIfCan(pPlayer, 24408);
+                    DoCastSpellIfCan(pPlayer, SPELL_CHARGE);
                     if (m_alreadyCharged.find(pPlayer->GetGUID()) != m_alreadyCharged.end())
                     {
                         m_creature->DoKillUnit(pPlayer);
@@ -62,13 +64,17 @@ struct boss_rhahkzorAI : public ScriptedAI
                         m_alreadyCharged.insert(pPlayer->GetGUID());
                 }
             }
-            m_uiCharge_Timer = urand(16000, 19000);
+            m_uiCharge_Timer = urand(19000, 22000);
             m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
+            m_chargeTarget = 0;
         }
         else
             m_uiCharge_Timer -= diff;
         
-        DoMeleeAttackIfReady();
+        if (m_chargeTarget != 0) 
+            m_creature->SetFacingToObject(m_creature->GetMap()->GetUnit(m_chargeTarget));
+        else
+            DoMeleeAttackIfReady();
     }
     
     Unit* GetFinalTarget()
