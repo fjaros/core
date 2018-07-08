@@ -89,6 +89,8 @@ void AddSC_instance_deadmines();
 void AddSC_boss_mr_smite();
 /* The Construct*/
 void AddSC_boss_rhahkzor();
+void AddSC_boss_sneeds_shredder();
+void AddSC_boss_sneed();
 /* End The Construct */
 
 void AddSC_gnomeregan();                             //gnomeregan
@@ -364,6 +366,8 @@ void AddScripts()
     AddSC_boss_mr_smite();
     /* The Construct*/
     AddSC_boss_rhahkzor();
+    AddSC_boss_sneeds_shredder();
+    AddSC_boss_sneed();
     /* End The Construct */
     AddSC_gnomeregan();                                     //gnomeregan
     AddSC_boss_thermaplugg();
