@@ -32,7 +32,7 @@ CreatureAI* GetAI_boss_sneed(Creature* pCreature)
     return new boss_sneedAI(pCreature);
 }
 
-void AddSC_boss_sneedAI()
+void AddSC_boss_sneed()
 {
     Script *newscript;
 
