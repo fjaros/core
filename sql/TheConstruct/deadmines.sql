@@ -18,6 +18,20 @@ UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=7534,maxhealth=77
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=94539,maxhealth=94539,armor=4391,dmg_multiplier=14,MovementType=1,AIName='',ScriptName='boss_rhahkzor' WHERE entry=644;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000001, '$N is making me ANGRY!', 1);
 
+-- Goblin Woodcarver
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=11000,armor=3514,dmg_multiplier=12 WHERE entry=641;
+
+-- Goblin Engineer
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=12000,armor=3614,dmg_multiplier=12 WHERE entry=622;
+
+-- Goblin Craftsman
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=10700,maxhealth=10900,armor=3414,dmg_multiplier=12 WHERE entry=1731;
+
 -- Sneed's Shredder
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=81977,maxhealth=81977,armor=4100,dmg_multiplier=14,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
+
+-- Sneed
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=41001,maxhealth=41001,armor=2100,dmg_multiplier=12,MovementType=1 WHERE entry=643;
+
+

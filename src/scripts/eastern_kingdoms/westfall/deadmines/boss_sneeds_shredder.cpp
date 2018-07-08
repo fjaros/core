@@ -16,7 +16,7 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     
     boss_sneeds_shredderAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_base_Attack_Timer = m_creature->getAttackTimer(BASE_ATTACK);
+        m_base_Attack_Timer = m_creature->GetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK);
 
         Reset();
     }
@@ -34,27 +34,29 @@ struct boss_sneeds_shredderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
         
-        if (m_Terminating_Timer < diff)
-        {
-            DoScriptText(SAY_TERMINATING, m_creature);
-            m_creature->setAttackTimer(BASE_ATTACK, 500);
-            m_isTerminating = true;
-            m_Recharging_Timer = 2500;
-        }
-        else
-            m_Terminating_Timer -= diff;
-        
         if (m_isTerminating)
         {
             if (m_Recharging_Timer < diff)
             {
-                m_creature->setAttackTimer(BASE_ATTACK, m_base_Attack_Timer);
                 m_Terminating_Timer = urand(12000, 15000);
                 m_isTerminating = false;
             }
             else
                 m_Recharging_Timer -= diff;
         }
+        else
+            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, m_base_Attack_Timer);
+        
+        if (m_Terminating_Timer < diff)
+        {
+            DoScriptText(SAY_TERMINATING, m_creature);
+            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 500);
+            m_Terminating_Timer = 20000;
+            m_isTerminating = true;
+            m_Recharging_Timer = 6000;
+        }
+        else
+            m_Terminating_Timer -= diff;
         
         DoMeleeAttackIfReady();
     }
