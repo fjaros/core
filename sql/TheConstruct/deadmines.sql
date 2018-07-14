@@ -89,7 +89,14 @@ REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TE
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=41001,maxhealth=41001,armor=2100,dmg_multiplier=16,MovementType=1,AIName='EventAI',ScriptName='' WHERE entry=643;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
-    (643, 31001, 25, 0, -31001, 1, 0, 0, 10),
+    (643, 31001, 35, 0, -31001, 1, 0, 0, 10),
     (643, 31002, 100, 1, -31002, 10, 0, 0, 10)
 ;
 
+-- Gilnid
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=92001,maxhealth=86001,armor=4534,dmg_multiplier=16,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
+INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
+VALUES
+    (1763, 31001, 45, 0, -31001, 1, 0, 0, 10),
+    (1763, 31002, 100, 1, -31002, 10, 0, 0, 10)
+;
