@@ -4,7 +4,9 @@
 
 enum
 {
-    SAY_TERMINATING = -2000002
+    SAY_TERMINATING = -2000002,
+    SPELL_SNEED_ID = 5141,
+    SPELL_SNEED_FLAGS = 7
 };
 
 struct boss_sneeds_shredderAI : public ScriptedAI
@@ -38,7 +40,7 @@ struct boss_sneeds_shredderAI : public ScriptedAI
         {
             if (m_Recharging_Timer < diff)
             {
-                m_Terminating_Timer = urand(12000, 15000);
+                m_Terminating_Timer = urand(15000, 18000);
                 m_isTerminating = false;
             }
             else
@@ -53,12 +55,18 @@ struct boss_sneeds_shredderAI : public ScriptedAI
             m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 500);
             m_Terminating_Timer = 20000;
             m_isTerminating = true;
-            m_Recharging_Timer = 6000;
+            m_Recharging_Timer = 10000;
         }
         else
             m_Terminating_Timer -= diff;
         
         DoMeleeAttackIfReady();
+    }
+    
+    void JustDied(Unit *pKiller)
+    {
+        // Cast spell eject sneed
+        DoCastSpellIfCan(m_creature, SPELL_SNEED_ID, SPELL_SNEED_FLAGS, m_creature->GetGUID());
     }
 };
 
