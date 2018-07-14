@@ -6,11 +6,13 @@ enum
 {
     AGGRO_YELL = 5619,
     SAY_CHARGE = -2000001,
-    SPELL_CHARGE = 24408
+    SPELL_CHARGE = 24408,
+    SPELL_CLEAVE = 15284
 };
 
 struct boss_rhahkzorAI : public ScriptedAI
 {
+    uint32 m_uiCleave_Timer;
     uint32 m_uiSayCharge_Timer;
     uint32 m_uiCharge_Timer;
     uint64 m_chargeTarget;
@@ -38,6 +40,14 @@ struct boss_rhahkzorAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+        
+        if (m_uiCleave_Timer < diff)
+        {
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
+            m_uiCleave_Timer = urand(5000, 7000);
+        }
+        else
+            m_uiCleave_Timer -= diff;
         
         if (m_uiSayCharge_Timer < diff) 
         {
