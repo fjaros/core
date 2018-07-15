@@ -62,6 +62,13 @@ UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=9540,maxhealth=97
 -- Defias Watchman
 UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=7534,maxhealth=7706,armor=3600,dmg_multiplier=14 WHERE entry=1725;
 
+-- Defias Taskmaster
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=7534,maxhealth=8706,armor=4600,dmg_multiplier=17 WHERE entry=4417;
+
+-- Defias Wizard
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=7534,maxhealth=8706,armor=2600,dmg_multiplier=17 WHERE entry=4418;
+
+
 -- Rhahk'Zor
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=94539,maxhealth=94539,armor=4391,dmg_multiplier=16,MovementType=1,AIName='',ScriptName='boss_rhahkzor' WHERE entry=644;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000001, '$N is making me ANGRY!', 1);
@@ -73,13 +80,16 @@ VALUES
 ;
 
 -- Goblin Woodcarver
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=11000,armor=3514,dmg_multiplier=12 WHERE entry=641;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=11000,armor=3514,dmg_multiplier=13 WHERE entry=641;
 
 -- Goblin Engineer
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=12000,armor=3614,dmg_multiplier=12 WHERE entry=622;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=9700,maxhealth=12000,armor=3614,dmg_multiplier=13 WHERE entry=622;
 
 -- Goblin Craftsman
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=10700,maxhealth=10900,armor=3414,dmg_multiplier=12 WHERE entry=1731;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=10700,maxhealth=10900,armor=3414,dmg_multiplier=13 WHERE entry=1731;
+
+-- Goblin Shipbuilder
+UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=9700,maxhealth=10900,armor=4414,dmg_multiplier=15 WHERE entry=3947;
 
 -- Sneed's Shredder
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=81977,maxhealth=81977,armor=4100,dmg_multiplier=16,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
@@ -93,10 +103,28 @@ VALUES
     (643, 31002, 100, 1, -31002, 10, 0, 0, 10)
 ;
 
+-- Remote-Controlled Golem
+UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=7404,maxhealth=7404,armor=1200,dmg_multiplier=16 WHERE entry=2520;
+
 -- Gilnid
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=92001,maxhealth=86001,armor=4534,dmg_multiplier=16,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=92001,maxhealth=92001,armor=4734,dmg_multiplier=17,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
     (1763, 31001, 45, 0, -31001, 1, 0, 0, 10),
     (1763, 31002, 100, 1, -31002, 10, 0, 0, 10)
 ;
+
+-- Defias blackguard
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=9140,maxhealth=9260,armor=4640,dmg_multiplier=14 WHERE entry=636;
+
+-- Defias Pirate
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=9740,maxhealth=10260,armor=4840,dmg_multiplier=15 WHERE entry=657;
+
+-- Defias Squallshaper
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=8750,maxhealth=9222,armor=3420,dmg_multiplier=15 WHERE entry=1732;
+
+-- Mr. Smite
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=95995,maxhealth=95995,armor=4934,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_mr_smite' WHERE entry=646;
+
+-- Cookie
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=106594,maxhealth=110345,armor=5533,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_cookie' WHERE entry=645;
