@@ -4,7 +4,8 @@
 
 enum
 {
-    SPELL_THROW_LIQUID_FIRE = 23970
+    SPELL_THROW_LIQUID_FIRE = 23970,
+    SPELL_BOMB = 19629
 };
 
 struct boss_gilnidAI : public ScriptedAI
@@ -43,6 +44,13 @@ struct boss_gilnidAI : public ScriptedAI
             m_liquidFire_Timer -= diff;
         
         DoMeleeAttackIfReady();
+    }
+    
+    void SpellHitTarget(Unit* target, const SpellEntry* spell)
+    {
+        // Trigger bomb AoE on the ground
+        if (target && spell && spell->Id == SPELL_THROW_LIQUID_FIRE)
+            m_creature->CastSpell(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), SPELL_BOMB, false);
     }
 };
 
