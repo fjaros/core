@@ -4,7 +4,8 @@
 
 enum
 {
-    SAY_COOKIE = -2000003
+    SAY_COOKIE = -2000003,
+    SPELL_MORTAL_STRIKE = 24573        
 };
 
 struct boss_cookieAI : public ScriptedAI
@@ -28,12 +29,13 @@ struct boss_cookieAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
         
-//        if (m_cone_Timer < diff)
-//        {
-//            
-//        }
-//        else
-//            m_cone_Timer -= diff;
+        if (m_cone_Timer < diff)
+        {
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_MORTAL_STRIKE);
+            m_cone_Timer = urand(8000, 11000);
+        }
+        else
+            m_cone_Timer -= diff;
 //        
 //        if (m_spawn_Timer < diff)
 //        {
@@ -53,7 +55,7 @@ struct boss_cookieAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_cookiAI(Creature* pCreature)
+CreatureAI* GetAI_boss_cookieAI(Creature* pCreature)
 {
     return new boss_cookieAI(pCreature);
 }
@@ -64,6 +66,6 @@ void AddSC_boss_cookie()
 
     newscript = new Script;
     newscript->Name = "boss_cookie";
-    newscript->GetAI = &GetAI_boss_cookiAI;
+    newscript->GetAI = &GetAI_boss_cookieAI;
     newscript->RegisterSelf();
 }
