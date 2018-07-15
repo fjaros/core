@@ -4,13 +4,14 @@
 
 enum
 {
+    SPELL_MOLTEN_METAL = 5213,
     SPELL_THROW_LIQUID_FIRE = 23970,
     SPELL_BOMB = 19629
 };
 
 struct boss_gilnidAI : public ScriptedAI
 {
-    
+    uint32 m_moltenMetal_Timer;
     uint32 m_liquidFire_Timer;
     
     boss_gilnidAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -28,17 +29,30 @@ struct boss_gilnidAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
         
-        if (m_liquidFire_Timer < diff)
+        if (m_moltenMetal_Timer < diff)
         {
-            ThreatList const& tList = m_creature->getThreatManager().getThreatList();
-            for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+            if (Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
-                Unit* attacker = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-                
-                DoCastSpellIfCan(attacker, SPELL_THROW_LIQUID_FIRE);
+                if (DoCastSpellIfCan(pUnit, SPELL_MOLTEN_METAL) == CAST_OK)
+                    m_moltenMetal_Timer = urand(7000, 10000);
             }
-            
-            m_liquidFire_Timer = urand(6000, 9000);
+        }
+        else
+            m_moltenMetal_Timer -= diff;
+        
+        if (m_liquidFire_Timer < diff)
+        {           
+            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THROW_LIQUID_FIRE) == CAST_OK)
+            {
+                ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+                for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+                {
+                    Unit* attacker = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+                    if (urand(1, 100) <= 50)
+                        DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_THROW_LIQUID_FIRE), true);
+                }
+                m_liquidFire_Timer = urand(9000, 12000);
+            }
         }
         else
             m_liquidFire_Timer -= diff;

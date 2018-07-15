@@ -108,9 +108,11 @@ UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=7404,maxhealth=74
 
 -- Gilnid
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=92001,maxhealth=92001,armor=4734,dmg_multiplier=17,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
+UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=5213;
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
-    (1763, 31001, 45, 0, -31001, 1, 0, 0, 10),
+    (1763, 31001, 55, 0, -31001, 1, 0, 0, 10),
     (1763, 31002, 100, 1, -31002, 10, 0, 0, 10)
 ;
 
@@ -128,3 +130,12 @@ UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=95995,maxhealth=9
 
 -- Cookie
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=106594,maxhealth=110345,armor=5533,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_cookie' WHERE entry=645;
+UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=6306;
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000004, 'Intruder eliminated. The Cookie is safe.', 1);
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000005, 'The Cookie... is... devoured.', 1);
+INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
+VALUES
+    (645, 31001, 65, 0, -31001, 1, 0, 0, 10),
+    (645, 31002, 100, 1, -31002, 10, 0, 0, 10)
+;
