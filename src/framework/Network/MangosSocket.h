@@ -230,6 +230,10 @@ class MangosSocket : protected WorldHandler
         uint32 m_Seed;
 
         bool m_isServerSocket;
+        
+        /* The Construct */
+        std::map<std::string, uint32> IpConnections;
+        /* End The Construct */
 };
 
 #endif // MANGOSSOCKET_H

@@ -22,6 +22,7 @@
 #include "WorldSession.h"
 #include "Log.h"
 #include "DBCStores.h"
+#include <iostream>
 
 
 template <typename SessionType, typename SocketName, typename Crypt>
@@ -136,6 +137,11 @@ int MangosSocket<SessionType, SocketName, Crypt>::open(void *a)
     }
 
     m_Address = remote_addr.get_host_addr();
+    /* The Construct */
+    std::cout << "Setting " << m_Address << " ++ " << std::endl;
+    if (++IpConnections[m_Address] >= 2)
+        return -1;
+    /* End The Construct */
 
     if (((SocketName*)this)->SendStartupPacket() == -1)
         return -1;
@@ -156,6 +162,9 @@ int MangosSocket<SessionType, SocketName, Crypt>::open(void *a)
 template <typename SessionType, typename SocketName, typename Crypt>
 int MangosSocket<SessionType, SocketName, Crypt>::close(int)
 {
+    std::cout << "Setting " << m_Address << " -- " << std::endl;
+    IpConnections[m_Address]--;
+    
     shutdown();
 
     closing_ = true;
