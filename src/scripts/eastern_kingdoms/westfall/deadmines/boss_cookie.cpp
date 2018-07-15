@@ -51,13 +51,6 @@ struct boss_cookieAI : public ScriptedAI
         
         DoMeleeAttackIfReady();
     }
-    
-    void SpellHitTarget(Unit* target, const SpellEntry* spell)
-    {
-        // Trigger bomb AoE on the ground
-        if (target && spell && spell->Id == SPELL_THROW_LIQUID_FIRE)
-            m_creature->CastSpell(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ(), SPELL_BOMB, false);
-    }
 };
 
 CreatureAI* GetAI_boss_cookiAI(Creature* pCreature)
