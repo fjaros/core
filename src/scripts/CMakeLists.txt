@@ -199,7 +199,12 @@ set (SCRIPTS_SRCS
 	eastern_kingdoms/western_plaguelands/scholomance/instance_scholomance.cpp
 	eastern_kingdoms/western_plaguelands/scholomance/scholo_trash.cpp
 	eastern_kingdoms/westfall/westfall.cpp
+        eastern_kingdoms/westfall/deadmines/boss_cookie.cpp
+        eastern_kingdoms/westfall/deadmines/boss_gilnid.cpp
 	eastern_kingdoms/westfall/deadmines/boss_mr_smite.cpp
+        eastern_kingdoms/westfall/deadmines/boss_rhahkzor.cpp
+        eastern_kingdoms/westfall/deadmines/boss_sneed.cpp
+        eastern_kingdoms/westfall/deadmines/boss_sneeds_shredder.cpp
 	eastern_kingdoms/westfall/deadmines/deadmines.cpp
 	eastern_kingdoms/westfall/deadmines/instance_deadmines.cpp
 	eastern_kingdoms/wetlands/wetlands.cpp

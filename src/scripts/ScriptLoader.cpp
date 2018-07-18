@@ -87,6 +87,13 @@ void AddSC_instance_blackwing_lair();
 void AddSC_deadmines();                              //deadmines
 void AddSC_instance_deadmines();
 void AddSC_boss_mr_smite();
+/* The Construct*/
+void AddSC_boss_cookie();
+void AddSC_boss_gilnid();
+void AddSC_boss_rhahkzor();
+void AddSC_boss_sneeds_shredder();
+void AddSC_boss_sneed();
+/* End The Construct */
 
 void AddSC_gnomeregan();                             //gnomeregan
 void AddSC_boss_thermaplugg();
@@ -359,6 +366,13 @@ void AddScripts()
     AddSC_deadmines();                                      //deadmines
     AddSC_instance_deadmines();
     AddSC_boss_mr_smite();
+    /* The Construct*/
+    AddSC_boss_cookie();
+    AddSC_boss_gilnid();
+    AddSC_boss_rhahkzor();
+    AddSC_boss_sneeds_shredder();
+    AddSC_boss_sneed();
+    /* End The Construct */
     AddSC_gnomeregan();                                     //gnomeregan
     AddSC_boss_thermaplugg();
     AddSC_instance_gnomeregan();
