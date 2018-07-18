@@ -1,4 +1,6 @@
 
+UPDATE map_template SET maxplayers=15,LevelMin=60,LevelMax=60 WHERE entry=36 AND patch=1;
+
 -- Create mooncloth & arcanite bar ref group
 DELETE FROM reference_loot_template WHERE entry IN (31001, 31002);
 INSERT INTO reference_loot_template (entry,item,ChanceOrQuestChance,groupid,mincountOrRef,maxcount,condition_id,patch_min,patch_max)
@@ -31,9 +33,9 @@ VALUES
     (31002, 13459, 0, 1, 1, 1, 0, 0, 10), -- Greater Shadow Protection Potion
     (31002, 13461, 0, 1, 1, 1, 0, 0, 10), -- Greater Arcane Protection Potion
     (31002, 13462, 0, 1, 1, 1, 0, 0, 10), -- Purification Potion
-    (31002, 13510, 0, 1, 1, 1, 0, 0, 10), -- Flask of the Titans
-    (31002, 13511, 0, 1, 1, 1, 0, 0, 10), -- Flask of Distilled Wisdom
-    (31002, 13512, 0, 1, 1, 1, 0, 0, 10), -- Flask of Supreme Power
+    (31002, 13510, 0, 1, 1, 2, 0, 0, 10), -- Flask of the Titans
+    (31002, 13511, 0, 1, 1, 2, 0, 0, 10), -- Flask of Distilled Wisdom
+    (31002, 13512, 0, 1, 1, 2, 0, 0, 10), -- Flask of Supreme Power
     (31002, 18045, 0, 1, 1, 1, 0, 0, 10), -- Tender Wolf Steak
     (31002, 18254, 0, 1, 1, 1, 0, 0, 10), -- Runn Tum Tuber Surprise
     (31002, 20004, 0, 1, 1, 1, 0, 0, 10), -- Major Troll's Blood Potion
