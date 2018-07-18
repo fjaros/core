@@ -521,7 +521,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_deathTimer = 0;
     m_deathExpireTime = 0;
 
-    m_swingErrorMsg = 0;
+    m_swingErrorMsg = ATTACK_RESULT_OK;
 
     for (int j = 0; j < PLAYER_MAX_BATTLEGROUND_QUEUES; ++j)
     {
@@ -1189,6 +1189,14 @@ struct UpdateAttackersCombatHelper
     }
     Player* player;
 };
+
+AutoAttackCheckResult Player::CanAutoAttackTarget(Unit const* pVictim) const
+{
+    if (!IsValidAttackTarget(pVictim))
+        return ATTACK_RESULT_FRIENDLY_TARGET;
+
+    return Unit::CanAutoAttackTarget(pVictim);
+}
 
 void Player::Update(uint32 update_diff, uint32 p_time)
 {
@@ -2851,13 +2859,17 @@ void Player::GiveLevel(uint32 level)
     PlayerClassLevelInfo classInfo;
     sObjectMgr.GetPlayerClassLevelInfo(getClass(), level, &classInfo);
 
+    uint32 hp = uint32((int32(classInfo.basehealth) - int32(GetCreateHealth()))
+        + (int32(GetHealthBonusFromStamina(info.stats[STAT_STAMINA])) - int32(GetHealthBonusFromStamina(GetCreateStat(STAT_STAMINA)))));
+
+    uint32 mana = uint32((int32(classInfo.basemana) - int32(GetCreateMana()))
+        + (int32(GetManaBonusFromIntellect(info.stats[STAT_INTELLECT])) - int32(GetManaBonusFromIntellect(GetCreateStat(STAT_INTELLECT)))));
+
     // send levelup info to client
     WorldPacket data(SMSG_LEVELUP_INFO, (4 + 4 + MAX_POWERS * 4 + MAX_STATS * 4));
     data << uint32(level);
-    data << uint32((int32(classInfo.basehealth) - int32(GetCreateHealth()))
-        + ((int32(info.stats[STAT_STAMINA]) - GetCreateStat(STAT_STAMINA)) * 10));
-    // for(int i = 0; i < MAX_POWERS; ++i)                  // Powers loop (0-6)
-    data << uint32(int32(classInfo.basemana)   - int32(GetCreateMana()));
+    data << hp;
+    data << uint32(getPowerType() == POWER_MANA ? mana : 0);
     data << uint32(0);
     data << uint32(0);
     data << uint32(0);
