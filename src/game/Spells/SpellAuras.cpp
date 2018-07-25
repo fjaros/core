@@ -1984,7 +1984,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     return;
                 }
                 case 10848: // Shroud of Death
-                case 22650: // Ghost Visual
                 case 27978: // Shroud of Death
                     if (apply)
                         target->m_AuraFlags |= UNIT_AURAFLAG_ALIVE_INVISIBLE;
@@ -5905,7 +5904,7 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Wor
     m_applyTime      = time(nullptr);
     m_isPassive      = IsPassiveSpell(GetId()) || spellproto->Attributes == 0x80;
     m_isDeathPersist = IsDeathPersistentSpell(spellproto);
-    m_isSingleTarget = IsSingleTargetSpell(spellproto);
+    m_isSingleTarget = HasSingleTargetAura(spellproto);
     m_procCharges    = spellproto->procCharges;
     m_isChanneled    = IsChanneledSpell(spellproto);
 
