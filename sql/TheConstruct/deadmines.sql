@@ -50,25 +50,25 @@ VALUES
 DELETE FROM creature_loot_template WHERE mincountOrRef IN (-31001, -31002);
 
 -- Defias Miner
-UPDATE creature_template SET minlevel=56,maxlevel=58,minhealth=6694,maxhealth=6891,armor=3498,dmg_multiplier=13 WHERE entry=598;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=16694,maxhealth=17891,armor=3498,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangedattacktime=1000,dmg_multiplier=1 WHERE entry=598;
 
 -- Defias Evoker
-UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=8696,maxhealth=8912,armor=3211,dmg_multiplier=13 WHERE entry=1729;
+UPDATE creature_template SET minlevel=61,maxlevel=63,minhealth=14696,maxhealth=16912,armor=3111,mindmg=3400,maxdmg=4400,baseattacktime=1200,rangedattacktime=1200,dmg_multiplier=1 WHERE entry=1729;
 
 -- Defias Strip Miner
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=7534,maxhealth=7706,armor=3600,dmg_multiplier=13 WHERE entry=4416;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=7534,maxhealth=7706,armor=3600,dmg_multiplier=13 WHERE entry=4416;
 
 -- Defias Overseer
-UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=9540,maxhealth=9780,armor=3840,dmg_multiplier=14 WHERE entry=634;
+UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=9540,maxhealth=9780,armor=3840,dmg_multiplier=14 WHERE entry=634;
 
 -- Defias Watchman
-UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=7534,maxhealth=7706,armor=3600,dmg_multiplier=14 WHERE entry=1725;
+UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=7534,maxhealth=7706,armor=3600,dmg_multiplier=14 WHERE entry=1725;
 
 -- Defias Taskmaster
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=7534,maxhealth=8706,armor=4600,dmg_multiplier=17 WHERE entry=4417;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=7534,maxhealth=8706,armor=4600,dmg_multiplier=17 WHERE entry=4417;
 
 -- Defias Wizard
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=7534,maxhealth=8706,armor=2600,dmg_multiplier=17 WHERE entry=4418;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=7534,maxhealth=8706,armor=2600,dmg_multiplier=17 WHERE entry=4418;
 
 
 -- Rhahk'Zor
