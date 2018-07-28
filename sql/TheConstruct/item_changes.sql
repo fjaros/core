@@ -27,3 +27,6 @@ UPDATE item_template SET stackable=20 WHERE entry IN (
 20008,20017,20516,20620,20763,21038,21254,21546,22192,22193,24281,24282
 );
 
+-- Set higher drop rate for crusader pattern according to classicdb
+REPLACE INTO creature_loot_template VALUES (4494, 16252, 0.75, 0, 1, 1, 0, 0, 10);
+REPLACE INTO creature_loot_template VALUES (9451, 16252, 0.75, 0, 1, 1, 0, 0, 10);
