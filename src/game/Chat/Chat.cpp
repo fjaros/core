@@ -1191,6 +1191,16 @@ AccountTypes ChatHandler::GetAccessLevel() const
 bool ChatHandler::isAvailable(ChatCommand const& cmd) const
 {
     // check security level only for simple  command (without child commands)
+    if (sWorld.getConfig(CONFIG_BOOL_IS_PTR))
+    {
+        // ptr commands
+        std::string ptr_commands[] = {"additem", "lookup item"};
+        for (std::string allowed_cmd : ptr_commands)
+        {
+            if (!allowed_cmd.compare(cmd.FullName))
+                return true;
+        }   
+    }
     return GetAccessLevel() >= (AccountTypes)cmd.SecurityLevel;
 }
 
