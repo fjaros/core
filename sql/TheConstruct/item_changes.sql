@@ -30,3 +30,14 @@ UPDATE item_template SET stackable=20 WHERE entry IN (
 -- Set higher drop rate for crusader pattern according to classicdb
 REPLACE INTO creature_loot_template VALUES (4494, 16252, 0.75, 0, 1, 1, 0, 0, 10);
 REPLACE INTO creature_loot_template VALUES (9451, 16252, 0.75, 0, 1, 1, 0, 0, 10);
+
+-- Set D2 sets to be usable by corresponding class only
+UPDATE item_template SET AllowableClass=1 WHERE entry IN (21994, 21995, 21996, 21997, 21998, 21999, 22000, 22001); -- warrior
+UPDATE item_template SET AllowableClass=2 WHERE entry IN (22086, 22087, 22088, 22089, 22090, 22091, 22092, 22093); -- paladin
+UPDATE item_template SET AllowableClass=4 WHERE entry IN (22010, 22011, 22013, 22015, 22016, 22017, 22060, 22061); -- hunter
+UPDATE item_template SET AllowableClass=8 WHERE entry IN (22002, 22003, 22004, 22005, 22006, 22007, 22008, 22009); -- rogue
+UPDATE item_template SET AllowableClass=16 WHERE entry IN (22078, 22079, 22080, 22081, 22082, 22083, 22084, 22085); -- priest
+UPDATE item_template SET AllowableClass=64 WHERE entry IN (22095, 22096, 22097, 22098, 22099, 22100, 22101, 22102); -- shaman
+UPDATE item_template SET AllowableClass=128 WHERE entry IN (22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069); -- mage
+UPDATE item_template SET AllowableClass=256 WHERE entry IN (22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077); -- warlock
+UPDATE item_template SET AllowableClass=1024 WHERE entry IN (22106, 22107, 22108, 22109, 22110, 22111, 22112, 22113); -- druid
