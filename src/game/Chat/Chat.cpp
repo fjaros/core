@@ -504,6 +504,8 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand npcCommandTable[] =
     {
         { NODE, "add",            SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
+        /* The Construct */
+        { NODE, "copy",           SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcCopyCommand,           "", nullptr },
         { NODE, "additem",        SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
         { NODE, "aiinfo",         SEC_DEVELOPPER,     false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
         { NODE, "allowmove",      SEC_DEVELOPPER,  false, &ChatHandler::HandleNpcAllowMovementCommand,    "", nullptr },
