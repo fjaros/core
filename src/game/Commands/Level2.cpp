@@ -1612,6 +1612,134 @@ bool ChatHandler::HandleNpcSummonCommand(char* args)
     return true;
 }
 
+// The Construct create new NPC from modelid
+bool ChatHandler::HandleNpcCopyCommand(char* args)
+{
+    uint32 entry;
+    if (!ExtractUInt32(&args, entry))
+    {
+        SendSysMessage("Invalid existing creature id.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    char *name = ExtractQuotedArg(&args, false);
+    if (!name)
+    {
+        SendSysMessage("Invalid command format. Expected: <id> <\"name\"> [\"sub name\"]");
+        SetSentErrorMessage(true);
+        return false;
+    }
+    char *subname = ExtractQuotedArg(&args, false);
+
+    WorldDatabase.BeginTransaction(sCreatureStorage.GetMaxEntry());
+
+    uint32 newId = sCreatureStorage.GetMaxEntry();
+
+    CreatureInfo const *creatureInfo = sCreatureStorage.LookupEntry<CreatureInfo>(entry);
+
+    static SqlStatementID insCreatureTemplate;
+    SqlStatement insert = WorldDatabase.CreateStatement(insCreatureTemplate, "INSERT INTO creature_template VALUES ("
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?,?,?,?,?,?,"
+            "?,?,?,?,?"
+            ")");
+
+    insert.addUInt32(newId);
+    insert.addUInt8(0);
+    for (int i = 0; i != 2; i++)
+        insert.addUInt32(creatureInfo->KillCredit[i]);
+    for (int i = 0; i != 4; i++)
+        insert.addUInt32(creatureInfo->ModelId[i]);
+    insert.addString(name);
+    if (subname)
+        insert.addString(subname);
+    else
+        insert.addString("");
+    insert.addUInt32(creatureInfo->GossipMenuId);
+    insert.addUInt8(creatureInfo->minlevel);
+    insert.addUInt8(creatureInfo->maxlevel);
+    insert.addUInt32(creatureInfo->minhealth);
+    insert.addUInt32(creatureInfo->maxhealth);
+    insert.addUInt32(creatureInfo->minmana);
+    insert.addUInt32(creatureInfo->maxmana);
+    insert.addUInt32(creatureInfo->armor);
+    insert.addUInt16(creatureInfo->faction_A);
+    insert.addUInt16(creatureInfo->faction_H);
+    insert.addUInt32(creatureInfo->npcflag);
+    insert.addFloat(creatureInfo->speed_walk);
+    insert.addFloat(creatureInfo->speed_run);
+    insert.addFloat(creatureInfo->scale);
+    insert.addUInt8(creatureInfo->rank);
+    insert.addFloat(creatureInfo->mindmg);
+    insert.addFloat(creatureInfo->maxdmg);
+    insert.addUInt8(creatureInfo->dmgschool);
+    insert.addUInt32(creatureInfo->attackpower);
+    insert.addFloat(creatureInfo->dmg_multiplier);
+    insert.addUInt32(creatureInfo->baseattacktime);
+    insert.addUInt32(creatureInfo->rangeattacktime);
+    insert.addUInt8(creatureInfo->unit_class);
+    insert.addUInt32(creatureInfo->unit_flags);
+    insert.addUInt32(creatureInfo->dynamicflags);
+    insert.addUInt8(creatureInfo->family);
+    insert.addUInt8(creatureInfo->trainer_type);
+    insert.addUInt32(creatureInfo->trainer_spell);
+    insert.addUInt8(creatureInfo->trainer_class);
+    insert.addUInt8(creatureInfo->trainer_race);
+    insert.addFloat(creatureInfo->minrangedmg);
+    insert.addFloat(creatureInfo->maxrangedmg);
+    insert.addUInt16(creatureInfo->rangedattackpower);
+    insert.addUInt8(creatureInfo->type);
+    insert.addUInt32(creatureInfo->type_flags);
+    insert.addUInt32(creatureInfo->lootid);
+    insert.addUInt32(creatureInfo->pickpocketLootId);
+    insert.addUInt32(creatureInfo->SkinLootId);
+    insert.addUInt16(creatureInfo->resistance1);
+    insert.addUInt16(creatureInfo->resistance2);
+    insert.addUInt16(creatureInfo->resistance3);
+    insert.addUInt16(creatureInfo->resistance4);
+    insert.addUInt16(creatureInfo->resistance5);
+    insert.addUInt16(creatureInfo->resistance6);
+    for (int i = 0; i != 4; i++)
+        insert.addUInt32(creatureInfo->spells[i]);
+    insert.addUInt32(creatureInfo->spells_template);
+    insert.addUInt32(creatureInfo->PetSpellDataId);
+    insert.addUInt32(creatureInfo->mingold);
+    insert.addUInt32(creatureInfo->maxgold);
+    insert.addString(creatureInfo->AIName);
+    insert.addUInt8(creatureInfo->MovementType);
+    insert.addUInt8(creatureInfo->InhabitType);
+    insert.addUInt8(creatureInfo->civilian);
+    insert.addUInt8(creatureInfo->RacialLeader);
+    insert.addUInt8(creatureInfo->RegenHealth);
+    insert.addUInt32(creatureInfo->equipmentId);
+    insert.addUInt32(creatureInfo->trainerId);
+    insert.addUInt32(creatureInfo->vendorId);
+    insert.addUInt32(creatureInfo->MechanicImmuneMask);
+    insert.addUInt32(creatureInfo->SchoolImmuneMask);
+    insert.addUInt32(creatureInfo->flags_extra);
+    insert.addString("");
+
+    insert.Execute();
+
+    std::string originalName = creatureInfo->Name;
+
+    WorldDatabase.CommitTransactionDirect();
+
+    sObjectMgr.LoadCreatureTemplates();
+    if (subname)
+        PSendSysMessage("NPC copy of %s made with ID %u and name %s <%s>.", originalName.c_str(), newId, name, subname);
+    else
+        PSendSysMessage("NPC copy of %s made with ID %u and name %s.", originalName.c_str(), newId, name);
+
+    return true;
+}
+
 //add item in vendorlist
 bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
 {
