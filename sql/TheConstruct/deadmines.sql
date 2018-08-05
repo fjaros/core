@@ -50,25 +50,25 @@ VALUES
 DELETE FROM creature_loot_template WHERE mincountOrRef IN (-31001, -31002);
 
 -- Defias Miner
-UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=16694,maxhealth=17891,armor=3498,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=598;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=16694,maxhealth=17891,armor=3498,mindmg=2400,maxdmg=3400,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=598;
 
 -- Defias Evoker
-UPDATE creature_template SET minlevel=61,maxlevel=63,minhealth=14696,maxhealth=16912,armor=3111,mindmg=2400,maxdmg=3400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1729;
+UPDATE creature_template SET minlevel=61,maxlevel=63,minhealth=14696,maxhealth=16912,armor=3111,mindmg=2200,maxdmg=3000,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=1729;
 
 -- Defias Strip Miner
-UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=17706,armor=3600,mindmg=3400,maxdmg=4400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=4416;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=17706,armor=3600,mindmg=2700,maxdmg=3600,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=4416;
 
 -- Defias Overseer
-UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=19540,maxhealth=19780,armor=3840,mindmg=4400,maxdmg=5400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=634;
+UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=19540,maxhealth=19780,armor=3840,mindmg=3000,maxdmg=3400,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=634;
 
 -- Defias Watchman
-UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=17534,maxhealth=17706,armor=3600,mindmg=3400,maxdmg=4400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1725;
+UPDATE creature_template SET minlevel=62,maxlevel=63,minhealth=17534,maxhealth=17706,armor=3600,mindmg=2700,maxdmg=3600,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=1725;
 
 -- Defias Taskmaster
-UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=18706,armor=4600,mindmg=3400,maxdmg=4400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=4417;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=18706,armor=4600,mindmg=2800,maxdmg=3400,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=4417;
 
 -- Defias Wizard
-UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=18706,armor=2600,mindmg=2400,maxdmg=3400,baseattacktime=2000,rangeattacktime=2000,dmg_multiplier=1 WHERE entry=4418;
+UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=18706,armor=2600,mindmg=2200,maxdmg=3200,baseattacktime=2000,rangeattacktime=2000,dmg_multiplier=1 WHERE entry=4418;
 
 
 -- Rhahk'Zor
@@ -82,23 +82,23 @@ VALUES
 ;
 
 -- Goblin Woodcarver
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=21000,armor=4514,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=641;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=21000,armor=4514,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=641;
 
 -- Goblin Engineer
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=22000,armor=4614,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=622;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=22000,armor=4614,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=622;
 
 -- Goblin Craftsman
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=20700,maxhealth=20900,armor=4414,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=1731;
+UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=20700,maxhealth=20900,armor=4414,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1731;
 
 -- Goblin Shipbuilder
-UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=19700,maxhealth=20900,armor=5414,mindmg=3400,maxdmg=4000,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=3947;
+UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=19700,maxhealth=20900,armor=5414,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=3947;
 
 -- Sneed's Shredder
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=4400,maxdmg=5000,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2500,maxdmg=3500,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
 
 -- Sneed
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=41001,maxhealth=41001,armor=2100,dmg_multiplier=16,MovementType=1,AIName='EventAI',ScriptName='' WHERE entry=643;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=41001,maxhealth=41001,armor=2100,dmg_multiplier=20,MovementType=1,AIName='EventAI',ScriptName='' WHERE entry=643;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
     (643, 31001, 35, 0, -31001, 1, 0, 0, 10)
@@ -106,10 +106,10 @@ VALUES
 ;
 
 -- Remote-Controlled Golem
-UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=7404,maxhealth=7404,armor=1200,dmg_multiplier=16 WHERE entry=2520;
+UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=5404,armor=1200,mindmg=3500,maxdmg=3500,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1 WHERE entry=2520;
 
 -- Gilnid
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=4400,maxdmg=5400,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
 UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=5213;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
@@ -119,19 +119,19 @@ VALUES
 ;
 
 -- Defias blackguard
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=29140,maxhealth=29260,armor=4640,mindmg=4400,maxdmg=5000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=636;
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=29140,maxhealth=29260,armor=4640,mindmg=2400,maxdmg=3100,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1,spell1=9080,spell2=6016,spell3=1427 WHERE entry=636;
 
 -- Defias Pirate
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=29740,maxhealth=30260,armor=4840,mindmg=4400,maxdmg=5000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=657;
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=29740,maxhealth=30260,armor=4840,mindmg=2400,maxdmg=3100,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=657;
 
 -- Defias Squallshaper
-UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=28750,maxhealth=29222,armor=3420,mindmg=4400,maxdmg=5000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1732;
+UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=28750,maxhealth=29222,armor=3420,mindmg=2400,maxdmg=3100,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=1732;
 
 -- Mr. Smite
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=295995,maxhealth=295995,armor=4934,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_mr_smite' WHERE entry=646;
 
 -- Cookie
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=310345,maxhealth=310345,armor=5533,mindmg=4500,maxdmg=5500,baseattacktime=750,rangeattacktime=750,dmg_multiplier=1,speed_walk=1.4,speed_run=1.84286,MovementType=1,AIName='',ScriptName='boss_cookie' WHERE entry=645;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=310345,maxhealth=310345,armor=4513,mindmg=2000,maxdmg=3000,baseattacktime=1250,rangeattacktime=1250,dmg_multiplier=1,speed_walk=1.4,speed_run=1.84286,MovementType=1,AIName='',ScriptName='boss_cookie' WHERE entry=645;
 UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=6306;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000004, 'Intruder eliminated. The Cookie is safe.', 1);
@@ -143,4 +143,4 @@ VALUES
 ;
 
 -- Edwin VanCleef
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=326594,maxhealth=326594,armor=5533,mindmg=4500,maxdmg=5500,baseattacktime=750,rangeattacktime=750,dmg_multiplier=1,MovementType=1 WHERE entry=639;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=316594,maxhealth=316594,armor=4633,mindmg=3000,maxdmg=3500,baseattacktime=1550,rangeattacktime=1550,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_vancleef' WHERE entry=639;

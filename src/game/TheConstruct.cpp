@@ -371,6 +371,13 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 1350;
                     break;
             }
+        case 79336: // vancleef
+            switch (newSpell->Id) {
+                case 17501: // cannon fire
+                    newSpell->EffectBasePoints[0] = 1500;
+                    break;
+            }
+            break;
     }
 
     return newSpell;

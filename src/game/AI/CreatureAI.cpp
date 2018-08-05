@@ -155,6 +155,7 @@ CanCastResult CreatureAI::DoCastSpellIfCan(Unit* pTarget, uint32 uiSpell, uint32
             if ((uiCastFlags & CF_MAIN_RANGED_SPELL) && pCaster->IsMoving())
                 pCaster->StopMoving();
 
+            // The Construct
             const SpellEntry* newSpell = ChangeSpellEffect(pSpell, pCaster);
             pCaster->CastSpell(pTarget, newSpell, uiCastFlags & CF_TRIGGERED, nullptr, nullptr, uiOriginalCasterGUID);
             return CAST_OK;
