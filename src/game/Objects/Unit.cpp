@@ -523,6 +523,20 @@ void Unit::RemoveSpellsCausingAura(AuraType auraType)
     }
 }
 
+void Unit::RemoveNonPassiveSpellsCausingAura(AuraType auraType)
+{
+    for (AuraList::const_iterator iter = m_modAuras[auraType].begin(); iter != m_modAuras[auraType].end();)
+    {
+        if (!((*iter)->GetSpellProto()->Attributes & SPELL_ATTR_PASSIVE))
+        {
+            RemoveAurasDueToSpell((*iter)->GetId());
+            iter = m_modAuras[auraType].begin();
+        }
+        else
+            iter++;
+    }
+}
+
 bool Unit::HasAuraTypeByCaster(AuraType auraType, ObjectGuid casterGuid) const
 {
     for (AuraList::const_iterator iter = m_modAuras[auraType].begin(); iter != m_modAuras[auraType].end(); ++iter)
@@ -709,7 +723,7 @@ uint32 Unit::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDa
         RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
         if (pVictim != this)
-            RemoveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
+            RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
 
         if (pVictim->GetTypeId() == TYPEID_PLAYER && !pVictim->IsMounted() && !pVictim->IsStandState())
             pVictim->SetStandState(UNIT_STAND_STATE_STAND);
@@ -5297,7 +5311,7 @@ typedef std::list<RemovedSpellData> RemoveSpellList;
 
 void Unit::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procExtra, uint32 amount, WeaponAttackType attType, SpellEntry const *procSpell, Spell* spell)
 {
-    if (!IsInWorld())
+    if ((pVictim && !IsInMap(pVictim)) || !IsInWorld())
         return;
 
     ProcTriggeredList procTriggered;
@@ -7518,20 +7532,8 @@ bool Unit::isTargetableForAttack(bool inverseAlive /*=false*/, bool isAttackerPl
     if (!CanBeDetected())
         return false;
 
-    if (const Player* player = GetCharmerOrOwnerPlayerOrPlayerItself())
-    {
-        if (player->isGameMaster())
-            return false;
-
-        // in such case, unlike a creature, a charmed Player can be targeted even if his charmer can't
-        if (const Player* charmedPlayer = ToPlayer())
-            player = charmedPlayer;
-
-        if (player->watching_cinematic_entry != 0 ||
-            player->IsPendingFarTeleport() ||
-            player->IsPendingInstanceSwitch())
-            return false;
-    }
+    if (GetTypeId() == TYPEID_PLAYER && (((Player *)this)->isGameMaster() || ((Player*)this)->watching_cinematic_entry != 0))
+        return false;
 
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE))
         return false;
@@ -7539,11 +7541,15 @@ bool Unit::isTargetableForAttack(bool inverseAlive /*=false*/, bool isAttackerPl
     if (isAttackerPlayer && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER))
         return false;
 
+    // Players or their pets can attack feigned players
+    if (!isAttackerPlayer && hasUnitState(UNIT_STAT_DIED))
+        return false;
+
     // inversealive is needed for some spells which need to be casted at dead targets (aoe)
     if (isAlive() == inverseAlive)
         return false;
 
-    return IsInWorld() && !hasUnitState(UNIT_STAT_DIED) && !IsTaxiFlying();
+    return IsInWorld() && !IsTaxiFlying();
 }
 
 // function based on function Unit::CanAttack from 13850 client
@@ -7741,13 +7747,6 @@ bool Unit::isVisibleForOrDetect(Unit const* u, WorldObject const* viewPoint, boo
     // redundant phasing
     //if (!u->CanSeeInWorld(this))
     //    return false;
-
-    if (Creature* pCreature = (Creature*)ToCreature())
-    {
-        bool bVisible = false;
-        if (pCreature->AI() && pCreature->AI()->IsVisibleFor(u, bVisible))
-            return bVisible;
-    }
 
     // Visible units are always visible for all units
     if (m_Visibility == VISIBILITY_ON)
@@ -8289,7 +8288,7 @@ float Unit::ApplyTotalThreatModifier(float threat, SpellSchoolMask schoolMask)
 void Unit::AddThreat(Unit* pVictim, float threat /*= 0.0f*/, bool crit /*= false*/, SpellSchoolMask schoolMask /*= SPELL_SCHOOL_MASK_NONE*/, SpellEntry const *threatSpell /*= NULL*/)
 {
     // Only mobs can manage threat lists
-    if (CanHaveThreatList())
+    if (CanHaveThreatList() && IsInMap(pVictim))
         m_ThreatManager.addThreat(pVictim, threat, crit, schoolMask, threatSpell, false);
 }
 
@@ -11119,7 +11118,7 @@ SpellAuraHolder* Unit::AddAura(uint32 spellId, uint32 addAuraFlags, Unit* pCaste
     if (!IsSpellAppliesAura(spellInfo, (1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
             !IsSpellHaveEffect(spellInfo, SPELL_EFFECT_PERSISTENT_AREA_AURA))
     {
-        sLog.outError("Impossible d'appliquer le sort %u : il n'a pas d'aura !", spellInfo->Id);
+        sLog.outError("Cannot apply aura with Id %u : spell does not have auras!", spellInfo->Id);
         return nullptr;
     }
 

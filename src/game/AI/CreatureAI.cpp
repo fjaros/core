@@ -39,8 +39,8 @@ void CreatureAI::JustRespawned()
     SetSpellsTemplate(m_creature->GetCreatureInfo()->spells_template);
 
     // Reset combat movement and melee attack.
-    m_CombatMovementEnabled = true;
-    m_MeleeEnabled = true;
+    m_bCombatMovement = true;
+    m_bMeleeAttack = true;
 }
 
 void CreatureAI::AttackedBy(Unit* attacker)
@@ -344,7 +344,7 @@ void CreatureAI::DoCastAOE(uint32 spellId, bool triggered)
 
 bool CreatureAI::DoMeleeAttackIfReady()
 {
-    return m_MeleeEnabled ? m_creature->UpdateMeleeAttackingState() : false;
+    return m_bMeleeAttack ? m_creature->UpdateMeleeAttackingState() : false;
 }
 
 struct EnterEvadeModeHelper
@@ -368,10 +368,10 @@ struct EnterEvadeModeHelper
 
 void CreatureAI::SetMeleeAttack(bool enabled)
 {
-    if (m_MeleeEnabled == enabled)
+    if (m_bMeleeAttack == enabled)
         return;
 
-    m_MeleeEnabled = enabled;
+    m_bMeleeAttack = enabled;
 
     if (Unit* pVictim = m_creature->getVictim())
     { 
@@ -384,10 +384,10 @@ void CreatureAI::SetMeleeAttack(bool enabled)
 
 void CreatureAI::SetCombatMovement(bool enabled)
 {
-    if (m_CombatMovementEnabled == enabled)
+    if (m_bCombatMovement == enabled)
         return;
 
-    m_CombatMovementEnabled = enabled;
+    m_bCombatMovement = enabled;
 
     if (Unit* pVictim = m_creature->getVictim())
     {
@@ -404,8 +404,8 @@ void CreatureAI::OnCombatStop()
     SetSpellsTemplate(m_creature->GetCreatureInfo()->spells_template);
 
     // Reset combat movement and melee attack.
-    m_CombatMovementEnabled = true;
-    m_MeleeEnabled = true;
+    m_bCombatMovement = true;
+    m_bMeleeAttack = true;
 }
 
 void CreatureAI::EnterEvadeMode()

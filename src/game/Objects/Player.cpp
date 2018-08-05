@@ -426,8 +426,7 @@ UpdateMask Player::updateVisualBits;
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
     m_enableInstanceSwitch(true), m_currentTicketCounter(0),
-    m_honorMgr(this), m_bNextRelocationsIgnored(0),
-    m_pendingInstanceSwitch(false)
+    m_honorMgr(this), m_bNextRelocationsIgnored(0)
 {
     m_objectType |= TYPEMASK_PLAYER;
     m_objectTypeId = TYPEID_PLAYER;
@@ -1175,21 +1174,6 @@ void Player::SetDrunkValue(uint16 newDrunkenValue, uint32 itemId)
         m_detectInvisibilityMask &= ~(1 << 6);
 }
 
-// Used to update attacker creatures (including pets' attackers) combat status when a player switches map
-struct UpdateAttackersCombatHelper
-{
-    explicit UpdateAttackersCombatHelper(Player* _player) : player(_player) {}
-    void operator()(Unit* unit) const
-    {
-        Unit::AttackerSet const attackers = unit->getAttackers();
-        for (Unit::AttackerSet::const_iterator itr = attackers.begin(); itr != attackers.end(); ++itr)
-            if (Creature* creature = (*itr)->ToCreature())
-                if (creature->getVictim() == unit)
-                    creature->SelectHostileTarget();
-    }
-    Player* player;
-};
-
 AutoAttackCheckResult Player::CanAutoAttackTarget(Unit const* pVictim) const
 {
     if (!IsValidAttackTarget(pVictim))
@@ -1406,14 +1390,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         uint16 newInstanceId = sMapMgr.GetContinentInstanceId(GetMap()->GetId(), GetPositionX(), GetPositionY(), &transition);
         if (newInstanceId != GetInstanceId())
             if (!transition || !isInCombat())
-            {
                 sMapMgr.ScheduleInstanceSwitch(this, newInstanceId);
-
-                // Update attacker creatures combat status if needed
-                UpdateAttackersCombatHelper helper(this);
-                helper(this);
-                CallForAllControlledUnits(helper, CONTROLLED_PET | CONTROLLED_TOTEMS | CONTROLLED_GUARDIANS | CONTROLLED_CHARM);
-            }
     }
     if (IsInWorld())
     {
@@ -1871,11 +1848,12 @@ bool Player::SwitchInstance(uint32 newInstanceId)
 
     //remove auras before removing from map...
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING);
-    RemoveSpellsCausingAura(SPELL_AURA_MOD_CHARM);
-    RemoveSpellsCausingAura(SPELL_AURA_MOD_POSSESS);
-    RemoveSpellsCausingAura(SPELL_AURA_AOE_CHARM);
+    RemoveCharmAuras();
     DisableSpline();
     SetMover(this);
+
+    // Clear hostile refs so that we have no cross-map (and thread) references being maintained
+    getHostileRefManager().deleteReferences();
 
     // remove from old map now
     oldmap->Remove(this, false);
@@ -2027,11 +2005,6 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         ScheduledTeleportData *data = new ScheduledTeleportData(mapid, x, y, z, orientation, options, recover);
 
         sMapMgr.ScheduleFarTeleport(this, data);
-
-        // Update attacker creatures combat status if needed
-        UpdateAttackersCombatHelper helper(this);
-        helper(this);
-        CallForAllControlledUnits(helper, CONTROLLED_PET | CONTROLLED_TOTEMS | CONTROLLED_GUARDIANS | CONTROLLED_CHARM);
     }
     return true;
 }
@@ -2126,6 +2099,9 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
         DisableSpline();
         SetFallInformation(0, data->z);
         ScheduleDelayedOperation(DELAYED_CAST_HONORLESS_TARGET);
+
+        // Clear hostile refs so that we have no cross-map (and thread) references being maintained
+        getHostileRefManager().deleteReferences();
 
         // if the player is saved before worldport ack (at logout for example)
         // this will be used instead of the current location in SaveToDB
@@ -15207,7 +15183,7 @@ void Player::LoadAura(AuraSaveStruct& s, uint32 timediff)
         return;
     }
 
-    if (s.remaintime != -1 && !IsPositiveSpell(spellproto))
+    if (s.remaintime != -1 && HasRealTimeDuration(spellproto))
     {
         if (timediff > (INT_MAX / IN_MILLISECONDS))
             return;
@@ -16737,8 +16713,17 @@ void Player::SendExplorationExperience(uint32 Area, uint32 Experience)
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendResetFailedNotify(uint32 mapid)
+void Player::SendFactionAtWar(uint32 reputationId, bool apply)
 {
+    WorldPacket data(SMSG_SET_FACTION_ATWAR, 4 + 1);
+    data << uint32(reputationId);
+    data << uint8(apply ? FACTION_FLAG_AT_WAR : 0);
+    GetSession()->SendPacket(&data);
+}
+
+void Player::SendResetFailedNotify()
+{
+    ChatHandler(this).SendSysMessage(LANG_LEAVE_TO_RESET_INSTANCE);
 }
 
 /// Reset all solo instances and optionally send a message on success for each

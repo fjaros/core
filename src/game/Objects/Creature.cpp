@@ -179,7 +179,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_HomeX(0.0f), m_HomeY(0.0f), m_HomeZ(0.0f), m_HomeOrientation(0.0f), m_reactState(REACT_PASSIVE),
     m_CombatDistance(0.0f), _lastDamageTakenForEvade(0), _playerDamageTaken(0), _nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
     m_AI_InitializeOnRespawn(false), m_callForHelpDist(5.0f), m_combatWithZoneState(false), m_startwaypoint(0), m_mountId(0),
-    _isEscortable(false)
+    _isEscortable(false), m_reputationId(-1)
 {
     m_regenTimer = 200;
     m_valuesCount = UNIT_END;
@@ -546,11 +546,14 @@ bool Creature::UpdateEntry(uint32 Entry, Team team, const CreatureData *data /*=
     if (GetCreatureInfo()->rank == CREATURE_ELITE_WORLDBOSS)
         SetLootAndXPModDist(150.0f);
 
+    m_reputationId = -1;
     // checked and error show at loading templates
-    if (FactionTemplateEntry const* factionTemplate = sObjectMgr.GetFactionTemplateEntry(GetCreatureInfo()->faction_A))
+    if (FactionTemplateEntry const* pFactionTemplate = sObjectMgr.GetFactionTemplateEntry(GetCreatureInfo()->faction_A))
     {
-        if (factionTemplate->factionFlags & FACTION_TEMPLATE_FLAG_PVP || IsCivilian())
+        if (pFactionTemplate->factionFlags & FACTION_TEMPLATE_FLAG_PVP || IsCivilian())
             SetPvP(true);
+        if (const FactionEntry* pFaction = sObjectMgr.GetFactionEntry(pFactionTemplate->faction))
+            m_reputationId = pFaction->reputationListID;
     }
 
     for (int i = 0; i < CREATURE_MAX_SPELLS; ++i)
@@ -3037,11 +3040,11 @@ uint32 Creature::GetVendorItemCurrentCount(VendorItem const* vItem)
 
     time_t ptime = time(nullptr);
 
-    if (vCount->lastIncrementTime + vItem->incrtime <= ptime)
+    if (vCount->lastIncrementTime + vCount->restockDelay <= ptime)
     {
         ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(vItem->item);
 
-        uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vItem->incrtime);
+        uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vCount->restockDelay);
         if ((vCount->count + diff * pProto->BuyCount) >= vItem->maxcount)
         {
             m_vendorItemCounts.erase(itr);
@@ -3065,10 +3068,16 @@ uint32 Creature::UpdateVendorItemCurrentCount(VendorItem const* vItem, uint32 us
         if (itr->itemId == vItem->item)
             break;
 
+    uint32 restockDelay = vItem->incrtime;
+    if (vItem->itemflags & VENDOR_ITEM_FLAG_RANDOM_RESTOCK)
+        restockDelay *= float(urand(80, 120)) / 100.0f;
+    if (vItem->itemflags & VENDOR_ITEM_FLAG_DYNAMIC_RESTOCK && sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
+        restockDelay *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+
     if (itr == m_vendorItemCounts.end())
     {
         uint32 new_count = vItem->maxcount > used_count ? vItem->maxcount - used_count : 0;
-        m_vendorItemCounts.push_back(VendorItemCount(vItem->item, new_count));
+        m_vendorItemCounts.push_back(VendorItemCount(vItem->item, new_count, restockDelay));
         return new_count;
     }
 
@@ -3076,11 +3085,11 @@ uint32 Creature::UpdateVendorItemCurrentCount(VendorItem const* vItem, uint32 us
 
     time_t ptime = time(nullptr);
 
-    if (vCount->lastIncrementTime + vItem->incrtime <= ptime)
+    if (vCount->lastIncrementTime + vCount->restockDelay <= ptime)
     {
         ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(vItem->item);
 
-        uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vItem->incrtime);
+        uint32 diff = uint32((ptime - vCount->lastIncrementTime) / vCount->restockDelay);
         if ((vCount->count + diff * pProto->BuyCount) < vItem->maxcount)
             vCount->count += diff * pProto->BuyCount;
         else
@@ -3089,6 +3098,7 @@ uint32 Creature::UpdateVendorItemCurrentCount(VendorItem const* vItem, uint32 us
 
     vCount->count = vCount->count > used_count ? vCount->count - used_count : 0;
     vCount->lastIncrementTime = ptime;
+    vCount->restockDelay = restockDelay;
     return vCount->count;
 }
 
@@ -3199,13 +3209,6 @@ void Creature::OnLeaveCombat()
     UpdateCombatState(false);
     UpdateCombatWithZoneState(false);
 
-    // a delayed spell event could set the creature in combat again
-    auto itEvent = m_Events.GetEvents().begin();
-    for (; itEvent != m_Events.GetEvents().end(); ++itEvent)
-        if (SpellEvent* event = dynamic_cast<SpellEvent*>(itEvent->second))
-            if (event->GetSpell()->getState() != SPELL_STATE_FINISHED)
-                event->GetSpell()->cancel();
-
     if (_creatureGroup)
         _creatureGroup->OnLeaveCombat(this);
 
@@ -3227,7 +3230,6 @@ void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
     if (_creatureGroup)
         _creatureGroup->OnMemberAttackStart(this, pWho);
 
-    // Pas encore en combat.
     if (notInCombat)
     {
         ResetCombatTime();
@@ -3244,6 +3246,14 @@ void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
 
         if (i_AI)
             i_AI->EnterCombat(pWho);
+
+        // Mark as At War with faction in client so player can attack back.
+        if (GetReputationId() >= 0)
+        {
+            if (Player* pPlayer = pWho->ToPlayer())
+                if (pPlayer->GetReputationMgr().SetAtWar(GetReputationId(), true))
+                    pPlayer->SendFactionAtWar(GetReputationId(), true);
+        }
     }
 }
 
@@ -3646,6 +3656,17 @@ SpellCastResult Creature::TryToCast(Unit* pTarget, const SpellEntry* pSpellInfo,
 
     spell->SetCastItem(nullptr);
     return spell->prepare(std::move(targets), nullptr, uiChance);
+}
+
+bool Creature::CantPathToVictim() const
+{
+    if (!getVictim())
+        return false;
+
+    if (GetMotionMaster()->GetCurrentMovementGeneratorType() != CHASE_MOTION_TYPE)
+        return false;
+
+    return !GetMotionMaster()->GetCurrent()->IsReachable();
 }
 
 // use this function to avoid having hostile creatures attack

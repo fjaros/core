@@ -1646,12 +1646,13 @@ class MANGOS_DLL_SPEC Player final: public Unit
         void SendAttackSwingBadFacingAttack();
         void SendAutoRepeatCancel();
         void SendExplorationExperience(uint32 Area, uint32 Experience);
+        void SendFactionAtWar(uint32 reputationId, bool apply);
         AutoAttackCheckResult CanAutoAttackTarget(Unit const*) const override;
 
         void ResetInstances(InstanceResetMethod method);
         void SendResetInstanceSuccess(uint32 MapId);
         void SendResetInstanceFailed(uint32 reason, uint32 MapId);
-        void SendResetFailedNotify(uint32 mapid);
+        void SendResetFailedNotify();
         bool CheckInstanceCount(uint32 instanceId);
         void AddInstanceEnterTime(uint32 instanceId, time_t enterTime);
 
@@ -1713,7 +1714,6 @@ class MANGOS_DLL_SPEC Player final: public Unit
         bool IsBeingTeleported() const { return mSemaphoreTeleport_Near || mSemaphoreTeleport_Far || mPendingFarTeleport; }
         bool IsBeingTeleportedNear() const { return mSemaphoreTeleport_Near; }
         bool IsBeingTeleportedFar() const { return mSemaphoreTeleport_Far; }
-        bool IsPendingFarTeleport() const { return mPendingFarTeleport; }
         void SetSemaphoreTeleportNear(bool semphsetting);
         void SetSemaphoreTeleportFar(bool semphsetting);
         void SetPendingFarTeleport(bool pending) { mPendingFarTeleport = pending; }
@@ -2199,15 +2199,11 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         inline bool HasScheduledEvent() const { return m_Events.HasScheduledEvent(); }
         void SetAutoInstanceSwitch(bool v) { m_enableInstanceSwitch = v; }
-        void SetPendingInstanceSwitch(bool v) { m_pendingInstanceSwitch = v; }
-        bool IsPendingInstanceSwitch() const { return m_pendingInstanceSwitch; }
 
         void SetEscortingGuid(const ObjectGuid& guid) { _escortingGuid = guid; }
         const ObjectGuid& GetEscortingGuid() const { return _escortingGuid; }
-
     protected:
         bool   m_enableInstanceSwitch;
-        bool   m_pendingInstanceSwitch;
         uint32 m_skippedUpdateTime;
         uint32 m_DetectInvTimer;
 

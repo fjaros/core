@@ -1522,7 +1522,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
             if (!(m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH))
             {
                 unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
+                unit->RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
             }
 
             // for delayed spells ignore not visible explicit target
@@ -1544,12 +1544,12 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                 if (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH)
                 {
                     unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                    unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
+                    unit->RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
                 }
 
                 // caster can be detected but have stealth aura
                 m_caster->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                m_caster->RemoveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
+                m_caster->RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
 
                 // Fait dans Unit::DealDamage, car etre assis ou debout change le % de critiques par exemple.
                 //if (!unit->IsStandState() && !unit->hasUnitState(UNIT_STAT_STUNNED))
@@ -4196,6 +4196,17 @@ void Spell::finish(bool ok)
         m_caster->AttackStop();
         m_caster->InterruptSpell(CURRENT_AUTOREPEAT_SPELL);
     }
+    else if ((m_spellInfo->AttributesEx & SPELL_ATTR_EX_MELEE_COMBAT_START))
+    {
+        // Pets should initiate melee combat on spell with this flag. (Growl)
+        if (Pet* pPet = m_caster->ToPet())
+            if (pPet->AI() && pPet->GetCharmInfo())
+                if (Unit* const pTarget = m_targets.getUnitTarget())
+                {
+                    pPet->GetCharmInfo()->SetIsCommandAttack(true);
+                    pPet->AI()->AttackStart(pTarget);
+                }
+    }
 }
 
 void Spell::SendCastResult(SpellCastResult result)
@@ -5280,6 +5291,13 @@ SpellCastResult Spell::CheckCast(bool strict)
         if ((m_spellInfo->MaxTargetLevel > 0) && (int32(target->getLevel()) > m_spellInfo->MaxTargetLevel))
             return SPELL_FAILED_HIGHLEVEL;
 
+#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_11_2
+        // World of Warcraft Client Patch 1.12.0 (2006-08-22)
+        // - Pickpocket can now be used on targets that are in combat, as long as the rogue remains stealthed.
+        if ((m_spellInfo->AttributesEx & SPELL_ATTR_EX_IS_PICKPOCKET) && target->isInCombat())
+            return SPELL_FAILED_TARGET_IN_COMBAT;
+#endif
+
         bool non_caster_target = target != m_caster && !IsSpellWithCasterSourceTargetsOnly(m_spellInfo);
 
         if (non_caster_target)
@@ -5449,7 +5467,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                 return SPELL_FAILED_TARGET_AURASTATE;
 
         //Must be behind the target.
-        if (m_spellInfo->AttributesEx2 == 0x100000 && (m_spellInfo->AttributesEx & 0x200) == 0x200 && target->HasInArc(M_PI_F, m_caster))
+        if (IsFromBehindOnlySpell(m_spellInfo) && target->HasInArc(M_PI_F, m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_BEHIND;
@@ -6491,7 +6509,9 @@ SpellCastResult Spell::CheckCast(bool strict)
             }
             case SPELL_AURA_PERIODIC_MANA_LEECH:
             {
-                if (!m_targets.getUnitTarget() && !IsAreaOfEffectSpell(m_spellInfo))
+                if (!m_targets.getUnitTarget() && 
+                        !IsAreaEffectTarget(Targets(m_spellInfo->EffectImplicitTargetA[i])) &&
+                        !IsAreaEffectTarget(Targets(m_spellInfo->EffectImplicitTargetB[i])))
                     return SPELL_FAILED_BAD_IMPLICIT_TARGETS;
 
                 if (m_caster->GetTypeId() != TYPEID_PLAYER || m_CastItem)

@@ -59,6 +59,7 @@ set (game_SRCS
 	AI/CreatureEventAIMgr.cpp
 	AI/GenericSpellAI.cpp
 	AI/GuardAI.cpp
+	AI/GuardEventAI.cpp
 	AI/NullCreatureAI.cpp
 	AI/PetAI.cpp
 	AI/PetEventAI.cpp
@@ -67,7 +68,6 @@ set (game_SRCS
 	AI/ScriptedAI.cpp
 	AI/ScriptedEscortAI.cpp
 	AI/ScriptedFollowerAI.cpp
-	AI/ScriptedGuardAI.cpp
 	AI/ScriptedInstance.cpp
 	AI/ScriptedPetAI.cpp
 	AI/TotemAI.cpp
@@ -276,6 +276,7 @@ set (game_SRCS
 	AI/CreatureEventAIMgr.h
 	AI/GameObjectAI.h
 	AI/GuardAI.h
+	AI/GuardEventAI.h
 	AI/NullCreatureAI.h
 	AI/PetAI.h
 	AI/PetEventAI.h
@@ -286,7 +287,6 @@ set (game_SRCS
 	AI/ScriptedFollowerAI.h
 	AI/ScriptedGameObject.h
 	AI/ScriptedGossip.h
-	AI/ScriptedGuardAI.h
 	AI/ScriptedInstance.h
 	AI/ScriptedPetAI.h
 	AI/TotemAI.h
