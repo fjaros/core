@@ -72,7 +72,7 @@ UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=1
 
 
 -- Rhahk'Zor
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=224539,maxhealth=224539,armor=4391,dmg_multiplier=16,MovementType=1,AIName='',ScriptName='boss_rhahkzor' WHERE entry=644;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=224539,maxhealth=224539,armor=4391,mindmg=5000,maxdmg=5400,baseattacktime=2000,rangedattacktime=2000,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_rhahkzor' WHERE entry=644;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000001, '$N is making me ANGRY!', 1);
 DELETE FROM creature_loot_template WHERE entry=644 AND item=14342;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
