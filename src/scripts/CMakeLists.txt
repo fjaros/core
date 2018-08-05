@@ -205,6 +205,7 @@ set (SCRIPTS_SRCS
         eastern_kingdoms/westfall/deadmines/boss_rhahkzor.cpp
         eastern_kingdoms/westfall/deadmines/boss_sneed.cpp
         eastern_kingdoms/westfall/deadmines/boss_sneeds_shredder.cpp
+	eastern_kingdoms/westfall/deadmines/boss_vancleef.cpp
 	eastern_kingdoms/westfall/deadmines/deadmines.cpp
 	eastern_kingdoms/westfall/deadmines/instance_deadmines.cpp
 	eastern_kingdoms/wetlands/wetlands.cpp

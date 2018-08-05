@@ -93,6 +93,7 @@ void AddSC_boss_gilnid();
 void AddSC_boss_rhahkzor();
 void AddSC_boss_sneeds_shredder();
 void AddSC_boss_sneed();
+void AddSC_boss_vancleef();
 /* End The Construct */
 
 void AddSC_gnomeregan();                             //gnomeregan
@@ -372,6 +373,7 @@ void AddScripts()
     AddSC_boss_rhahkzor();
     AddSC_boss_sneeds_shredder();
     AddSC_boss_sneed();
+    AddSC_boss_vancleef();
     /* End The Construct */
     AddSC_gnomeregan();                                     //gnomeregan
     AddSC_boss_thermaplugg();

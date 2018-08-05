@@ -6,7 +6,9 @@ enum
 {
     SAY_TERMINATING = -2000002,
     SPELL_SNEED_ID = 5141,
-    SPELL_SNEED_FLAGS = 7
+    SPELL_SNEED_FLAGS = 7,
+    SPELL_PIERCE_ARMOR = 6016,
+    SPELL_LIVING_BOMB = 20475
 };
 
 struct boss_sneeds_shredderAI : public ScriptedAI
@@ -15,6 +17,7 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     uint32 m_Terminating_Timer;
     bool m_isTerminating;
     uint32 m_Recharging_Timer;
+    uint32 m_Living_Bomb_Timer;
     
     boss_sneeds_shredderAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
@@ -25,6 +28,7 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     
     void Reset()
     {
+        m_Living_Bomb_Timer = 6000;
         m_Terminating_Timer = 10000;
         m_isTerminating = false;
         m_Recharging_Timer = 0;
@@ -35,12 +39,23 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
+
+        if (m_Living_Bomb_Timer < diff)
+        {
+            Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+            if (pTarget && DoCastSpellIfCan(pTarget, SPELL_LIVING_BOMB) == CAST_OK)
+            {
+                m_Living_Bomb_Timer = urand(6000, 9000);
+            }
+        }
+        else
+            m_Living_Bomb_Timer -= diff;
         
         if (m_isTerminating)
         {
             if (m_Recharging_Timer < diff)
             {
-                m_Terminating_Timer = urand(15000, 18000);
+                m_Terminating_Timer = urand(15000, 17000);
                 m_isTerminating = false;
             }
             else
@@ -52,15 +67,19 @@ struct boss_sneeds_shredderAI : public ScriptedAI
         if (m_Terminating_Timer < diff)
         {
             DoScriptText(SAY_TERMINATING, m_creature);
-            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 500);
+            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 300);
             m_Terminating_Timer = 20000;
             m_isTerminating = true;
-            m_Recharging_Timer = 10000;
+            m_Recharging_Timer = 12000;
         }
         else
             m_Terminating_Timer -= diff;
         
-        DoMeleeAttackIfReady();
+        if (DoMeleeAttackIfReady())
+        {
+            // apply pierce armor
+            DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCE_ARMOR);
+        }
     }
     
     void JustDied(Unit *pKiller)

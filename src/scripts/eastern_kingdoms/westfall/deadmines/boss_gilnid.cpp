@@ -34,7 +34,7 @@ struct boss_gilnidAI : public ScriptedAI
             if (Unit* pUnit = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
             {
                 if (DoCastSpellIfCan(pUnit, SPELL_MOLTEN_METAL) == CAST_OK)
-                    m_moltenMetal_Timer = urand(7000, 10000);
+                    m_moltenMetal_Timer = urand(4000, 5000);
             }
         }
         else
@@ -51,7 +51,7 @@ struct boss_gilnidAI : public ScriptedAI
                     if (urand(1, 100) <= 50)
                         DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_THROW_LIQUID_FIRE), true);
                 }
-                m_liquidFire_Timer = urand(5000, 7000);
+                m_liquidFire_Timer = urand(6000, 8000);
             }
         }
         else

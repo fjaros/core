@@ -28,7 +28,7 @@ struct boss_cookieAI : public ScriptedAI
     {
         m_acid_splash_Timer = 3000;
         m_mortal_strike_Timer = 10000;
-        m_geyser_Timer = 16000;
+        m_geyser_Timer = 14000;
     }
     
     void Aggro(Unit* pWho)
@@ -38,7 +38,10 @@ struct boss_cookieAI : public ScriptedAI
     
     void OnCombatStop()
     {
-        DoScriptText(SAY_COOKIE_WIPE, m_creature);
+        if (m_creature->isAlive())
+        {
+            DoScriptText(SAY_COOKIE_WIPE, m_creature);
+        }
         ScriptedAI::OnCombatStop();
     }
     
@@ -51,7 +54,7 @@ struct boss_cookieAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-        
+
         if (m_acid_splash_Timer < diff)
         {
             if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_ACID_SPLASH) == CAST_OK)
@@ -81,7 +84,7 @@ struct boss_cookieAI : public ScriptedAI
                     
                     DoResetThreat();
                 }
-                m_geyser_Timer = urand(15000, 18000);
+                m_geyser_Timer = urand(12000, 16000);
             }
         }
         else 

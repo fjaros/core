@@ -344,10 +344,33 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 5000;
                     break;
                 case 24408: //charge
-                    newSpell->EffectBasePoints[0] = 2000;
+                    newSpell->EffectBasePoints[1] = 2000;
                     break;
             }
             break;
+        case 79223: // sneed's shredder
+            switch (newSpell->Id) {
+                case 20475: // living bomb
+                    newSpell->EffectAmplitude[0] = 5000;
+                    break;
+            }
+            break;
+        case 79344: // cookie
+            switch (newSpell->Id) {
+                case 6306: //acid splash
+                    newSpell->EffectBasePoints[0] = 300;
+                    break;
+            }
+            break;
+        case 79206: // gilnid
+            switch (newSpell->Id) {
+                case 5213: // molten metal
+                    newSpell->EffectBasePoints[0] = 250;
+                    break;
+                case 23970: // liquid fire
+                    newSpell->EffectBasePoints[0] = 1350;
+                    break;
+            }
     }
 
     return newSpell;
