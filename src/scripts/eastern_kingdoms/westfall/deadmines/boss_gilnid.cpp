@@ -21,7 +21,7 @@ struct boss_gilnidAI : public ScriptedAI
     
     void Reset()
     {
-        m_liquidFire_Timer = 10000;
+        m_liquidFire_Timer = 7000;
     }
     
     void UpdateAI(const uint32 diff)
@@ -51,7 +51,7 @@ struct boss_gilnidAI : public ScriptedAI
                     if (urand(1, 100) <= 50)
                         DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_THROW_LIQUID_FIRE), true);
                 }
-                m_liquidFire_Timer = urand(9000, 12000);
+                m_liquidFire_Timer = urand(5000, 7000);
             }
         }
         else

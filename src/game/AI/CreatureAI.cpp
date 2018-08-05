@@ -26,6 +26,9 @@
 #include "Totem.h"
 #include "GridSearchers.h"
 
+// The Construct
+#include "TheConstruct.h"
+
 CreatureAI::~CreatureAI()
 {
 }
@@ -152,7 +155,8 @@ CanCastResult CreatureAI::DoCastSpellIfCan(Unit* pTarget, uint32 uiSpell, uint32
             if ((uiCastFlags & CF_MAIN_RANGED_SPELL) && pCaster->IsMoving())
                 pCaster->StopMoving();
 
-            pCaster->CastSpell(pTarget, pSpell, uiCastFlags & CF_TRIGGERED, nullptr, nullptr, uiOriginalCasterGUID);
+            const SpellEntry* newSpell = ChangeSpellEffect(pSpell, pCaster);
+            pCaster->CastSpell(pTarget, newSpell, uiCastFlags & CF_TRIGGERED, nullptr, nullptr, uiOriginalCasterGUID);
             return CAST_OK;
         }
 

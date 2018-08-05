@@ -332,3 +332,23 @@ void AddToGuild(Player *player) {
 	    break;
     }
 }
+
+const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
+{
+    SpellEntry* newSpell = (SpellEntry*)pSpell;
+
+    switch (pCaster->GetGUIDLow()) {
+        case 79168: // rhahk'zor
+            switch (newSpell->Id) {
+                case 15284: //cleave
+                    newSpell->EffectBasePoints[0] = 5000;
+                    break;
+                case 24408: //charge
+                    newSpell->EffectBasePoints[0] = 2000;
+                    break;
+            }
+            break;
+    }
+
+    return newSpell;
+}

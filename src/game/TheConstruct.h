@@ -15,4 +15,6 @@ void InsertRiding(Player *player);
 void InsertHomebind(Player *player);
 void AddToGuild(Player *player);
 
+const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster);
+
 #endif /* THECONSTRUCT_H */

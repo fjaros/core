@@ -70,19 +70,21 @@ struct boss_rhahkzorAI : public ScriptedAI
             {
                 if (Player* pPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
-                    DoCastSpellIfCan(pPlayer, SPELL_CHARGE);
-                    if (m_alreadyCharged.find(pPlayer->GetGUID()) != m_alreadyCharged.end())
+                    if (DoCastSpellIfCan(pPlayer, SPELL_CHARGE) == CAST_OK)
                     {
-                        m_creature->DoKillUnit(pPlayer);
-                        m_alreadyCharged.erase(pPlayer->GetGUID());
+                        if (m_alreadyCharged.find(pPlayer->GetGUID()) != m_alreadyCharged.end())
+                        {
+                            m_creature->DoKillUnit(pPlayer);
+                            m_alreadyCharged.erase(pPlayer->GetGUID());
+                        }
+                        else
+                            m_alreadyCharged.insert(pPlayer->GetGUID());
+                        m_uiCharge_Timer = urand(18000, 22000);
+                        m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
+                        m_chargeTarget = 0;
                     }
-                    else
-                        m_alreadyCharged.insert(pPlayer->GetGUID());
                 }
             }
-            m_uiCharge_Timer = urand(18000, 22000);
-            m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
-            m_chargeTarget = 0;
         }
         else
             m_uiCharge_Timer -= diff;
