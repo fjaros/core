@@ -41,3 +41,8 @@ UPDATE item_template SET AllowableClass=64 WHERE entry IN (22095, 22096, 22097, 
 UPDATE item_template SET AllowableClass=128 WHERE entry IN (22062, 22063, 22064, 22065, 22066, 22067, 22068, 22069); -- mage
 UPDATE item_template SET AllowableClass=256 WHERE entry IN (22070, 22071, 22072, 22073, 22074, 22075, 22076, 22077); -- warlock
 UPDATE item_template SET AllowableClass=1024 WHERE entry IN (22106, 22107, 22108, 22109, 22110, 22111, 22112, 22113); -- druid
+
+-- Make following items unique equipped
+UPDATE item_template SET Flags=Flags | 0x80000 WHERE entry=13965; -- Blackhand's Breadth
+UPDATE item_template SET Flags=Flags | 0x80000 WHERE entry=13966; -- Mark of Tyranny
+UPDATE item_template SET Flags=Flags | 0x80000 WHERE entry=13968; -- Eye of the Beast
