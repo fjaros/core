@@ -6375,6 +6375,24 @@ void Player::RewardReputation(Unit *pVictim, float rate)
                 GetReputationMgr().ModifyReputation(team2_factionEntry, donerep2 / 2, true);
         }
     }
+
+    if (Rep->repfaction3)
+    {
+        int32 donerep3 = CalculateReputationGain(REPUTATION_SOURCE_KILL, Rep->repvalue3, Rep->repfaction3, pVictim->getLevel());
+        donerep3 = int32(donerep3 * rate);
+        FactionEntry const *factionEntry3 = sObjectMgr.GetFactionEntry(Rep->repfaction3);
+        uint32 current_reputation_rank3 = GetReputationMgr().GetRank(factionEntry3);
+        if (factionEntry3 && current_reputation_rank3 <= Rep->reputation_max_cap3)
+            GetReputationMgr().ModifyReputation(factionEntry3, donerep3);
+
+        // Wiki: Team factions value divided by 2
+        if (factionEntry3 && Rep->is_teamaward3)
+        {
+            FactionEntry const *team3_factionEntry = sObjectMgr.GetFactionEntry(factionEntry3->team);
+            if (team3_factionEntry)
+                GetReputationMgr().ModifyReputation(team3_factionEntry, donerep3 / 2, true);
+        }
+    }
 }
 
 //Calculate how many reputation points player gain with the quest

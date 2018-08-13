@@ -291,12 +291,16 @@ struct ReputationOnKillEntry
 {
     uint32 repfaction1;
     uint32 repfaction2;
+    uint32 repfaction3;
     bool is_teamaward1;
     uint32 reputation_max_cap1;
     int32 repvalue1;
     bool is_teamaward2;
     uint32 reputation_max_cap2;
     int32 repvalue2;
+    bool is_teamaward3;
+    uint32 reputation_max_cap3;
+    int32 repvalue3;
     bool team_dependent;
 };
 
