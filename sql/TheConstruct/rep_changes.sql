@@ -13,4 +13,18 @@ ALTER TABLE `creature_onkill_reputation`
   ADD COLUMN `RewOnKillRepValue3` MEDIUMINT(9) DEFAULT 0  NOT NULL AFTER `IsTeamAward3`;
 
 -- add WSG rep to some stuff in AQ20/40
-UPDATE `creature_onkill_reputation` SET `RewOnKillRepFaction3` = '889', `MaxStanding2` = '7', `MaxStanding3` = '7', `RewOnKillRepValue3` = `RewOnKillRepValue1` WHERE `creature_id` IN ('15229', '15230', '15235', '15236', '15240', '15246', '15249', '15250', '15252', '15262', '15264', '15275', '15276', '15277', '15311', '15312', '15339', '15340', '15341', '15348', '15369', '15370', '15727', '15741');
+UPDATE `creature_onkill_reputation` SET `RewOnKillRepFaction3` = '889', `MaxStanding2` = '7', `MaxStanding3` = '7', `RewOnKillRepValue3` = `RewOnKillRepValue1` WHERE `creature_id` IN (
+'15168', '15229', '15230', '15235', '15236', '15240', '15246', '15249',
+'15250', '15252', '15262', '15264', '15275', '15276', '15277', '15311',
+'15312', '15318', '15319', '15320', '15323', '15324', '15325', '15327',
+'15333', '15335', '15336', '15338', '15339', '15340', '15341', '15348',
+'15355', '15369', '15370', '15461', '15462', '15505', '15727', '15741'
+) AND `RewOnKillRepFaction1` = 609;
+
+UPDATE `creature_onkill_reputation` SET `RewOnKillRepFaction3` = '889', `MaxStanding2` = '7', `MaxStanding3` = '7', `RewOnKillRepValue3` = `RewOnKillRepValue2` WHERE `creature_id` IN (
+'15168', '15229', '15230', '15235', '15236', '15240', '15246', '15249',
+'15250', '15252', '15262', '15264', '15275', '15276', '15277', '15311',
+'15312', '15318', '15319', '15320', '15323', '15324', '15325', '15327',
+'15333', '15335', '15336', '15338', '15339', '15340', '15341', '15348',
+'15355', '15369', '15370', '15461', '15462', '15505', '15727', '15741'
+) AND `RewOnKillRepFaction2` = 609;
