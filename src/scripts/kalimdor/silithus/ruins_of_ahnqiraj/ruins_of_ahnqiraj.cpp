@@ -129,6 +129,7 @@ struct mob_anubisath_guardianAI : public ScriptedAI
         m_uiExplode_Timer = 6000;
 
         m_creature->RemoveAllAuras();
+        BASIC_LOG("Anubisath Guardian: Reset");
     }
 
     void JustDied(Unit* pKiller)
@@ -218,6 +219,7 @@ struct mob_anubisath_guardianAI : public ScriptedAI
 
         if (m_uiSummon_Timer < uiDiff)
         {
+            BASIC_LOG("Anubisath Guardian: %u %u", m_uiSummon_Timer, m_uiSummonCount);
             if (m_uiSummonCount < 4)
             {
                 m_creature->SummonCreature(m_uiNPCSummon,

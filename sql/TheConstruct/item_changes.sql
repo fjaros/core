@@ -46,3 +46,6 @@ UPDATE item_template SET AllowableClass=1024 WHERE entry IN (22106, 22107, 22108
 UPDATE item_template SET Flags=Flags | 0x80000,maxcount=1 WHERE entry=13965; -- Blackhand's Breadth
 UPDATE item_template SET Flags=Flags | 0x80000,maxcount=1 WHERE entry=13966; -- Mark of Tyranny
 UPDATE item_template SET Flags=Flags | 0x80000,maxcount=1 WHERE entry=13968; -- Eye of the Beast
+
+-- set mageblood potion to 3 second cooldown
+update `item_template` set `spellcooldown_1` = '0' ,`spellcategorycooldown_1` = '3000' where `entry` = '20007';
