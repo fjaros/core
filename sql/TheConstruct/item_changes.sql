@@ -49,3 +49,24 @@ UPDATE item_template SET Flags=Flags | 0x80000,maxcount=1 WHERE entry=13968; -- 
 
 -- set mageblood potion to 3 second cooldown
 update `item_template` set `spellcooldown_1` = '0' ,`spellcategorycooldown_1` = '3000' where `entry` = '20007';
+
+-- set ace of * to drop from MC bosses
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES
+('12118', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('11982', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('12057', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('12264', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('12056', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('11988', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('12098', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('11502', '36000', '100', '1', '-36000', '1', '0', '0', '10'),
+('12259', '36000', '100', '1', '-36000', '1', '0', '0', '10');
+
+INSERT INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES
+('16719', '36000', '100', '1', '-36000', '1', '0', '0', '10');
+
+INSERT INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES
+('36000', '19227', '0', '1', '1', '1', '0', '0', '10'),
+('36000', '19268', '0', '1', '1', '1', '0', '0', '10'),
+('36000', '19276', '0', '1', '1', '1', '0', '0', '10'),
+('36000', '19258', '0', '1', '1', '1', '0', '0', '10');
