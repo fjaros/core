@@ -154,7 +154,7 @@ void DoAtLogin(Player *player) {
 		2458, // Berserker stance
 		355, // Taunt
 		7386, // Sunder Armor
-		20611 // Intercept
+		20252 // Intercept
 	    };
 	    break;
     }
