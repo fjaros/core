@@ -70,3 +70,6 @@ INSERT INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 ('36000', '19268', '0', '1', '1', '1', '0', '0', '10'),
 ('36000', '19276', '0', '1', '1', '1', '0', '0', '10'),
 ('36000', '19258', '0', '1', '1', '1', '0', '0', '10');
+
+-- remove script from Annora master enchanter
+UPDATE creature_template SET ScriptName='' WHERE entry=11073;

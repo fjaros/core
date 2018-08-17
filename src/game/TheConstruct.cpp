@@ -48,10 +48,10 @@ void DoAtLogin(Player *player) {
     std::vector<int> disabled_spells = {};
     switch (player->getClass()) {
 	case CLASS_DRUID:
-	    skills = {SKILL_DEFENSE, SKILL_UNARMED, SKILL_MACES, SKILL_2H_MACES, SKILL_POLEARMS, SKILL_STAVES, SKILL_DAGGERS, SKILL_FIST_WEAPONS};
+	    skills = {SKILL_DEFENSE, SKILL_UNARMED, SKILL_MACES, SKILL_2H_MACES, SKILL_STAVES, SKILL_DAGGERS, SKILL_FIST_WEAPONS};
 	    armors = {SKILL_LEATHER, SKILL_CLOTH};
 	    spells = {
-		MACE, MACE2, POLEARM, STAFF, DAGGER, FIST,
+		MACE, MACE2, STAFF, DAGGER, FIST,
 		CLOTH, LEATHER,
 		1066, // Aquatic form
 		9634, // Dire bear form
