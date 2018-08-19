@@ -93,7 +93,9 @@ void DoAtLogin(Player *player) {
 	    armors = {SKILL_CLOTH};
 	    spells = {
 		SWORD, STAFF, DAGGER, WAND,
-		CLOTH
+		CLOTH,
+                10140, // Conjure water rank 7
+                28612 // Conjure food rank 7
 	    };
 	    break;
 	case CLASS_PALADIN:
