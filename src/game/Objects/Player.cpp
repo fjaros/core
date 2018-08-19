@@ -10084,7 +10084,7 @@ InventoryResult Player::CanUseItem(Item *pItem, bool not_loading) const
                     return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
             }
 
-            if (pProto->RequiredReputationFaction && uint32(GetReputationRank(pProto->RequiredReputationFaction)) < pProto->RequiredReputationRank)
+            if (!sWorld.getConfig(CONFIG_BOOL_IS_PTR) && pProto->RequiredReputationFaction && uint32(GetReputationRank(pProto->RequiredReputationFaction)) < pProto->RequiredReputationRank)
                 return EQUIP_ERR_CANT_EQUIP_REPUTATION;
 
             return EQUIP_ERR_OK;
