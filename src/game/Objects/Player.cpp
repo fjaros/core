@@ -10099,6 +10099,10 @@ InventoryResult Player::CanUseItem(ItemPrototype const *pProto, bool not_loading
 
     if (pProto)
     {
+        // The Construct. Allow all equip on PTR.
+        if (sWorld.getConfig(CONFIG_BOOL_IS_PTR))
+            return EQUIP_ERR_OK;
+
         if ((pProto->AllowableClass & getClassMask()) == 0 || (pProto->AllowableRace & getRaceMask()) == 0)
             return EQUIP_ERR_YOU_CAN_NEVER_USE_THAT_ITEM;
 
