@@ -6262,9 +6262,12 @@ int32 Player::CalculateReputationGain(ReputationSource source, int32 rep, int32 
             break;
         case REPUTATION_SOURCE_QUEST:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_QUEST);
+            // The Construct - default diffLvl to 0 for low level quests
+            /*
             if (getLevel() >= creatureOrQuestLevel + 5)
                 diffLvl = getLevel() - creatureOrQuestLevel - 5;
             else
+            */
                 diffLvl = 0;
             break;
         case REPUTATION_SOURCE_SPELL:
