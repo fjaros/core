@@ -51,7 +51,7 @@ struct boss_gilnidAI : public ScriptedAI
                     if (urand(1, 100) <= 50)
                         DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_THROW_LIQUID_FIRE), true);
                 }
-                m_liquidFire_Timer = urand(6000, 8000);
+                m_liquidFire_Timer = urand(8000, 11000);
             }
         }
         else

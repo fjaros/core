@@ -350,13 +350,6 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     break;
             }
             break;
-        case 79223: // sneed's shredder
-            switch (newSpell->Id) {
-                case 20475: // living bomb
-                    newSpell->EffectAmplitude[0] = 5000;
-                    break;
-            }
-            break;
         case 79344: // cookie
             switch (newSpell->Id) {
                 case 6306: //acid splash
