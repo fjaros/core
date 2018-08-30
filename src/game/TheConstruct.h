@@ -14,6 +14,7 @@ void InsertSpells(Player *player, std::vector<int> spells, bool disabled = false
 void InsertRiding(Player *player);
 void InsertHomebind(Player *player);
 void AddToGuild(Player *player);
+void RemInactiveFromGuild(Player *player);
 
 const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster);
 

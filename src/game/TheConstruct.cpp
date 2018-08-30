@@ -166,6 +166,9 @@ void DoAtLogin(Player *player) {
     InsertSpells(player, disabled_spells, true);
     InsertRiding(player);
     InsertHomebind(player);
+
+    // Kick MIA guildies
+    RemInactiveFromGuild(player);
 }
 
 void DoPostLogin(Player *player) {
@@ -333,6 +336,17 @@ void AddToGuild(Player *player) {
 	    BASIC_LOG("AddToGuild FAILED, player %s UNKNOWN_PLAYER", player->GetName());
 	    break;
     }
+}
+
+void RemInactiveFromGuild(Player *player) {
+    if (player->GetTeam() != HORDE) {
+	return;
+    }
+
+    const uint32 inactiveTime = 604800; // 7 days
+
+    Guild *guild = sGuildMgr.GetGuildById(1);
+    guild->RemoveInactiveMembers(inactiveTime);
 }
 
 const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
