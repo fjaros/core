@@ -101,3 +101,5 @@ sql/migrations/*.py
 # Generating by CMake
 revision.h
 migrations_list.h
+Makefile
+make.log
