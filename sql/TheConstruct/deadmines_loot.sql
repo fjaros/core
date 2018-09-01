@@ -226,7 +226,8 @@ INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `g
 -- zg shoulder signets
 INSERT INTO  `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES
 ('36005', '20076', '0', '1', '1', '1', '0', '0', '10'),
-('36005', '20077', '0', '1', '1', '1', '0', '0', '10');
+('36005', '20077', '0', '1', '1', '1', '0', '0', '10'),
+('36005', '20078', '0', '1', '1', '1', '0', '0', '10');
 
 -- zg class enchants
 INSERT INTO  `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`, `patch_min`, `patch_max`) VALUES
