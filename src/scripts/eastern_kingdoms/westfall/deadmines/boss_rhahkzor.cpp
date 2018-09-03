@@ -96,6 +96,8 @@ struct boss_rhahkzorAI : public ScriptedAI
                         m_uiSayCharge_Timer = urand(16000, 19000);
                         m_uiCharge_Timer = m_uiSayCharge_Timer + 3000;
                         m_chargeTarget = 0;
+
+                        m_creature->SetTargetGuid(m_creature->SelectHostileTarget());
                     }
                 }
             }
