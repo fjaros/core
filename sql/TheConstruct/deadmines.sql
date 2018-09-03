@@ -73,7 +73,10 @@ UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=1
 
 -- Rhahk'Zor
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=224539,maxhealth=224539,armor=4391,mindmg=5000,maxdmg=5400,baseattacktime=2000,rangeattacktime=2000,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_rhahkzor' WHERE entry=644;
-REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000001, '$N is making me ANGRY!', 1);
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES
+    (-2000001, '$N is making me ANGRY!', 1),
+    (-2000006, 'Me likey you like Toad', 0)
+;
 DELETE FROM creature_loot_template WHERE entry=644 AND item=14342;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
@@ -94,11 +97,11 @@ UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=20700,maxhealth=2
 UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=19700,maxhealth=20900,armor=5414,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=3947;
 
 -- Sneed's Shredder
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2500,maxdmg=3500,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2400,maxdmg=3200,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder' WHERE entry=642;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
 
 -- Sneed
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=41001,maxhealth=41001,armor=2100,dmg_multiplier=20,MovementType=1,AIName='EventAI',ScriptName='' WHERE entry=643;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed' WHERE entry=643;
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
     (643, 31001, 35, 0, -31001, 1, 0, 0, 10)
@@ -111,7 +114,6 @@ UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=54
 -- Gilnid
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=2400,maxdmg=3000,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid' WHERE entry=1763;
 UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=5213;
-REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
 INSERT INTO creature_loot_template (entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id, patch_min, patch_max) 
 VALUES
     (1763, 31001, 55, 0, -31001, 1, 0, 0, 10)

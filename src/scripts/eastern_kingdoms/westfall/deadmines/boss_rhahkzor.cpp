@@ -6,8 +6,10 @@ enum
 {
     AGGRO_YELL = 5619,
     SAY_CHARGE = -2000001,
+    SAY_TOAD = -2000006,
     SPELL_CHARGE = 24408,
-    SPELL_CLEAVE = 15284
+    SPELL_CLEAVE = 16044,
+    SPELL_HEX = 24053
 };
 
 struct boss_rhahkzorAI : public ScriptedAI
@@ -15,6 +17,7 @@ struct boss_rhahkzorAI : public ScriptedAI
     uint32 m_uiCleave_Timer;
     uint32 m_uiSayCharge_Timer;
     uint32 m_uiCharge_Timer;
+    uint32 m_uiHex_Timer;
     uint64 m_chargeTarget;
     std::set<uint64> m_alreadyCharged;
     
@@ -25,8 +28,10 @@ struct boss_rhahkzorAI : public ScriptedAI
     
     void Reset()
     {
-        m_uiCharge_Timer = 19000;
-        m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
+        m_uiCharge_Timer = 16000;
+        m_uiCleave_Timer = 6000;
+        m_uiSayCharge_Timer = 13000;
+        m_uiHex_Timer = 9000;
         m_chargeTarget = 0;
         m_alreadyCharged.clear();
     }
@@ -43,22 +48,31 @@ struct boss_rhahkzorAI : public ScriptedAI
         
         if (m_uiCleave_Timer < diff)
         {
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE);
-            m_uiCleave_Timer = urand(5000, 7000);
+            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_CLEAVE) == CAST_OK)
+            m_uiCleave_Timer = urand(4000, 6000);
         }
         else
             m_uiCleave_Timer -= diff;
+
+        if (m_uiHex_Timer < diff)
+        {
+            Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER);
+            if (DoCastSpellIfCan(pTarget, SPELL_HEX, CF_FORCE_CAST) == CAST_OK)
+            {
+                DoScriptText(SAY_TOAD, m_creature);
+                m_uiHex_Timer = urand(8000, 11000);
+            }
+        }
+        else
+            m_uiHex_Timer -= diff;
         
         if (m_uiSayCharge_Timer < diff) 
         {
-            if (Unit* pTarget = m_creature->GetFarthestVictimInRange(0.0f, 40.0f))
+            if (Unit* pTarget = GetRandomFarthestPlayerInRange(0.0f, 40.0f, 3))
             {
-                if (Player* pPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
-                {
-                    DoScriptText(SAY_CHARGE, m_creature, pTarget);
-                    m_chargeTarget = pTarget->GetGUID();
-                    m_uiSayCharge_Timer = 20000;
-                }
+                DoScriptText(SAY_CHARGE, m_creature, pTarget);
+                m_chargeTarget = pTarget->GetGUID();
+                m_uiSayCharge_Timer = 16000;
             }
         }
         else
@@ -79,8 +93,8 @@ struct boss_rhahkzorAI : public ScriptedAI
                         }
                         else
                             m_alreadyCharged.insert(pPlayer->GetGUID());
-                        m_uiCharge_Timer = urand(18000, 22000);
-                        m_uiSayCharge_Timer = m_uiCharge_Timer - 3000;
+                        m_uiSayCharge_Timer = urand(16000, 19000);
+                        m_uiCharge_Timer = m_uiSayCharge_Timer + 3000;
                         m_chargeTarget = 0;
                     }
                 }
@@ -88,16 +102,43 @@ struct boss_rhahkzorAI : public ScriptedAI
         }
         else
             m_uiCharge_Timer -= diff;
-        
+
         if (m_chargeTarget != 0) 
         {
-            m_creature->StopMoving();
-            m_creature->AttackStop();
+            if (m_creature->IsMoving())
+                m_creature->StopMoving();
+            if (m_creature->isAttackingPlayer())
+                m_creature->AttackStop();
             m_creature->SetTargetGuid(m_chargeTarget);
             m_creature->SetFacingToObject(m_creature->GetMap()->GetUnit(m_chargeTarget));
         }
         else
             DoMeleeAttackIfReady();
+    }
+
+    Unit* GetRandomFarthestPlayerInRange(float min, float max, int randomCount)
+    {
+        float bestRange = min;
+        std::vector<Unit*> units;
+
+        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* pTarget = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (!pTarget || !pTarget->IsPlayer())
+                continue;
+
+            units.push_back(pTarget);
+        }
+        std::sort(units.begin(), units.end(), [this](Unit *i, Unit *j)
+            {
+                return m_creature->GetDistance(i) > m_creature->GetDistance(j);
+            }
+        );
+        if (randomCount > units.size())
+            randomCount = units.size();
+
+        return units[rand() % randomCount];
     }
     
     Unit* GetFinalTarget()
@@ -113,7 +154,8 @@ struct boss_rhahkzorAI : public ScriptedAI
         for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
         {
             Unit* potentialBlocker = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-            if (!potentialBlocker || potentialBlocker->GetGUID() == chargeTarget->GetGUID())
+            if (!potentialBlocker || !potentialBlocker->IsPlayer() ||
+                    potentialBlocker->GetGUID() == chargeTarget->GetGUID())
                 continue;
 
             float t_angle = m_creature->GetAngle(potentialBlocker);

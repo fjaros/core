@@ -15,6 +15,7 @@ struct boss_sneeds_shredderAI : public ScriptedAI
 {
     uint32 m_base_Attack_Timer;
     uint32 m_Terminating_Timer;
+    uint32 m_Pierce_Timer;
     bool m_isTerminating;
     uint32 m_Recharging_Timer;
     uint32 m_Living_Bomb_Timer;
@@ -28,10 +29,11 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     
     void Reset()
     {
-        m_Living_Bomb_Timer = 6000;
+        m_Living_Bomb_Timer = 7000;
         m_Terminating_Timer = 10000;
+        m_Pierce_Timer = 10000; //lets start off with a faster pierce, force a tank cd off the bat
         m_isTerminating = false;
-        m_Recharging_Timer = 0;
+        m_Recharging_Timer = 2000;
         m_creature->setAttackTimer(BASE_ATTACK, m_base_Attack_Timer);
     }
     
@@ -42,10 +44,10 @@ struct boss_sneeds_shredderAI : public ScriptedAI
 
         if (m_Living_Bomb_Timer < diff)
         {
-            Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
+            Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER);
             if (pTarget && DoCastSpellIfCan(pTarget, SPELL_LIVING_BOMB) == CAST_OK)
             {
-                m_Living_Bomb_Timer = urand(6000, 9000);
+                m_Living_Bomb_Timer = 9000;
             }
         }
         else
@@ -53,33 +55,37 @@ struct boss_sneeds_shredderAI : public ScriptedAI
         
         if (m_isTerminating)
         {
-            if (m_Recharging_Timer < diff)
+            if (m_Terminating_Timer < diff)	// if terminate timer runs out, stop terminating
             {
-                m_Terminating_Timer = urand(15000, 17000);
+                m_Terminating_Timer = 10000;
                 m_isTerminating = false;
+                m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, m_base_Attack_Timer);
             }
             else
-                m_Recharging_Timer -= diff;
+                m_Terminating_Timer -= diff;	// otherwise decrease the timer
         }
-        else
-            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, m_base_Attack_Timer);
+        else	// currently terminating, engage the recharge and set make sure his attack speed is normalized
+        {
+            m_Recharging_Timer -= diff;
+        }
         
-        if (m_Terminating_Timer < diff)
+        if (m_Recharging_Timer < diff)	//recharged, lets terminate
         {
             DoScriptText(SAY_TERMINATING, m_creature);
             m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 300);
-            m_Terminating_Timer = 20000;
             m_isTerminating = true;
             m_Recharging_Timer = 12000;
         }
-        else
-            m_Terminating_Timer -= diff;
-        
-        if (DoMeleeAttackIfReady())
+
+        if (m_Pierce_Timer < diff)
         {
-            // apply pierce armor
-            DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCE_ARMOR);
+            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_PIERCE_ARMOR) == CAST_OK)
+                m_Pierce_Timer = 10000;
         }
+        else
+            m_Pierce_Timer -= diff;
+
+        DoMeleeAttackIfReady();
     }
     
     void JustDied(Unit *pKiller)

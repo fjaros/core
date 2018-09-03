@@ -356,7 +356,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
     switch (pCaster->GetGUIDLow()) {
         case 79168: // rhahk'zor
             switch (newSpell->Id) {
-                case 15284: //cleave
+                case 16044: //cleave
                     newSpell->EffectBasePoints[0] = 5000;
                     break;
                 case 24408: //charge
@@ -364,6 +364,13 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     break;
             }
             break;
+		case 79337: // smite
+			switch (newSpell->Id) {
+			case 27993: //cleave
+				newSpell->EffectBasePoints[0] = 1000;
+				break;
+			}
+			break;
         case 79344: // cookie
             switch (newSpell->Id) {
                 case 6306: //acid splash

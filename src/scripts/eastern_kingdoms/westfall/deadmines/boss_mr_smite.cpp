@@ -34,10 +34,13 @@ enum
     EQUIP_ID_HAMMER                 = 19610,                   //10756,
 
     SPELL_NIBLE_REFLEXES            = 6433,                 // removed after phase 1
-    SPELL_SMITE_SLAM                = 6435,                 // only casted in phase 3
+	SPELL_NIBLE_REFLEXES2			= 6264,                 // LOL NO ITS NOT
+    SPELL_SMITE_SLAM                = 27862,                 // only casted in phase 3
     SPELL_SMITE_STOMP               = 6432,
+	SPELL_SMITE_STOMP2				= 27993,				// stomp with a 12 second slow
     SPELL_SMITE_HAMMER              = 6436,                 // unclear, not casted in
     SPELL_THRASH                    = 3391,//12787,                // only casted in phase 2; unclear, 3391 directly casted instead of proc aura
+	SPELL_ENRAGE					= 19516,				//hard enrage
 
     GO_SMITE_CHEST                  = 144111, //ALITA coffre.
 
@@ -61,6 +64,8 @@ struct boss_mr_smiteAI : public ScriptedAI
     uint32 m_uiEquipTimer;
     uint32 m_uiSlamTimer;
     uint32 m_uiThrashTimer;
+	uint32 m_uiStompSlowTimer;
+	uint32 m_uiBetterKillHimFast;
     bool equiping; //Alita : Basicaly when he is not chasing the player.
     uint32 estimatedSplineTime;
     bool inSpline; //bool true while running to chest.
@@ -72,9 +77,10 @@ struct boss_mr_smiteAI : public ScriptedAI
         inSpline = 0;
         m_uiPhase = PHASE_1;
         m_uiEquipTimer = 0;
-        m_uiSlamTimer = 9000;
         m_uiThrashTimer = 4000;
-
+		m_uiStompSlowTimer = 10000;
+		m_uiSlamTimer = m_uiStompSlowTimer + 1000;
+		m_uiBetterKillHimFast = 180000;	//lets try 3 minutes
         //DoCastSpellIfCan(m_creature, SPELL_NIBLE_REFLEXES, CF_TRIGGERED);//in creature_addon now
 
 
@@ -262,14 +268,6 @@ struct boss_mr_smiteAI : public ScriptedAI
             }
             case PHASE_2:
             {
-                if (m_uiThrashTimer < uiDiff)//instead of the aura, because the aura procs too much
-                {
-                    if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THRASH) == CAST_OK)
-                        m_uiThrashTimer = urand(1500, 4000);
-                }
-                else
-                    m_uiThrashTimer -= uiDiff;
-
                 if (m_creature->GetHealthPercent() < 33.0f)
                 {
                     if (DoCastSpellIfCan(m_creature, SPELL_SMITE_STOMP) == CAST_OK)
@@ -293,7 +291,7 @@ struct boss_mr_smiteAI : public ScriptedAI
                 if (m_uiSlamTimer < uiDiff)
                 {
                     if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_SMITE_SLAM) == CAST_OK)
-                        m_uiSlamTimer = 11000;
+                        m_uiSlamTimer = m_uiStompSlowTimer + 1000;
                 }
                 else
                     m_uiSlamTimer -= uiDiff;
@@ -308,7 +306,33 @@ struct boss_mr_smiteAI : public ScriptedAI
             m_creature->GetRandomAttackPoint(target, x, y, z);
             m_creature->GetMotionMaster()->MovePoint(0, x, y, z);
         }
+
+		if (m_uiThrashTimer < uiDiff)//instead of the aura, because the aura procs too much
+		{
+			if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_THRASH) == CAST_OK)
+				m_uiThrashTimer = urand(1000, 3000);
+		}
+		else
+			m_uiThrashTimer -= uiDiff;
+
         DoMeleeAttackIfReady();
+
+		if (m_uiStompSlowTimer < uiDiff)
+		{
+			DoCastSpellIfCan(m_creature, SPELL_SMITE_STOMP2);
+			m_uiStompSlowTimer = 10000;
+		}
+		else
+			m_uiStompSlowTimer -= uiDiff;
+
+		if (m_uiBetterKillHimFast < uiDiff)
+		{
+			DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
+		}
+		else
+			m_uiBetterKillHimFast -= uiDiff;
+
+		DoCastSpellIfCan(m_creature, SPELL_NIBLE_REFLEXES2, CF_AURA_NOT_PRESENT);
     }
 };
 
