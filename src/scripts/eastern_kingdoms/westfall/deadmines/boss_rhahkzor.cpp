@@ -57,7 +57,7 @@ struct boss_rhahkzorAI : public ScriptedAI
         if (m_uiHex_Timer < diff)
         {
             Unit *pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER);
-            if (DoCastSpellIfCan(pTarget, SPELL_HEX, CF_FORCE_CAST) == CAST_OK)
+            if (DoCastSpellIfCan(pTarget, SPELL_HEX, CF_TRIGGERED) == CAST_OK)
             {
                 DoScriptText(SAY_TOAD, m_creature);
                 m_uiHex_Timer = urand(8000, 11000);
@@ -120,7 +120,6 @@ struct boss_rhahkzorAI : public ScriptedAI
 
     Unit* GetRandomFarthestPlayerInRange(float min, float max, int randomCount)
     {
-        float bestRange = min;
         std::vector<Unit*> units;
 
         ThreatList const& tList = m_creature->getThreatManager().getThreatList();
@@ -132,6 +131,9 @@ struct boss_rhahkzorAI : public ScriptedAI
 
             units.push_back(pTarget);
         }
+        if (units.empty())
+            return nullptr;
+
         std::sort(units.begin(), units.end(), [this](Unit *i, Unit *j)
             {
                 return m_creature->GetDistance(i) > m_creature->GetDistance(j);

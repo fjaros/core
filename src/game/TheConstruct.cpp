@@ -364,24 +364,24 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     break;
             }
             break;
-		case 79337: // smite
-			switch (newSpell->Id) {
-			case 27993: //cleave
-				newSpell->EffectBasePoints[0] = 1000;
-				break;
-			}
-			break;
+        case 79337: // smite
+            switch (newSpell->Id) {
+                case 27993: //cleave
+                    newSpell->EffectBasePoints[0] = 1000;
+                    break;
+            }
+            break;
         case 79344: // cookie
             switch (newSpell->Id) {
                 case 6306: //acid splash
-                    newSpell->EffectBasePoints[0] = 300;
+                    newSpell->EffectBasePoints[0] = 1800;
                     break;
             }
             break;
         case 79206: // gilnid
             switch (newSpell->Id) {
                 case 5213: // molten metal
-                    newSpell->EffectBasePoints[0] = 250;
+                    newSpell->EffectBasePoints[0] = 500;
                     break;
                 case 23970: // liquid fire
                     newSpell->EffectBasePoints[0] = 1350;
