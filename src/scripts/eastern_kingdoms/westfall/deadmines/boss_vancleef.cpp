@@ -10,8 +10,9 @@ enum
     SAY_HEALTH_75 = 6063,
     SAY_HEALTH_35 = 6064,
     SAY_HEALTH_10 = 6065,
-    HAMSTRING = 9080,
-    CANNON_FIRE = 17501
+    SPELL_HAMSTRING = 9080,
+    SPELL_CANNON_FIRE = 17501,
+    SPELL_ENGULFING_FLAMES = 20019
 };
 
 struct boss_vancleefAI : public ScriptedAI
@@ -57,15 +58,23 @@ struct boss_vancleefAI : public ScriptedAI
         if (m_Cannon_Fire_Timer < diff)
         {
             Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-            if (pTarget && DoCastSpellIfCan(pTarget, CANNON_FIRE) == CAST_OK)
-                m_Cannon_Fire_Timer = urand(7000, 10000);
+            if (pTarget)
+            {
+                std::vector<Unit*> nearbyTargets = GetNearbyTargets(pTarget, 8.0f);
+                if (DoCastSpellIfCan(pTarget, SPELL_CANNON_FIRE) == CAST_OK)
+                {
+                    for (Unit *nearbyTarget : nearbyTargets)
+                        DoCastSpellIfCan(nearbyTarget, SPELL_CANNON_FIRE, CF_TRIGGERED);
+                    m_Cannon_Fire_Timer = urand(8000, 12000);
+                }
+            }
         }
         else
             m_Cannon_Fire_Timer -= diff;
 
         if (m_Hamstring_Timer < diff)
         {
-            if (DoCastSpellIfCan(m_creature->getVictim(), HAMSTRING) == CAST_OK)
+            if (DoCastSpellIfCan(m_creature->getVictim(), SPELL_HAMSTRING) == CAST_OK)
                 m_Hamstring_Timer = urand(8000, 12000);
         }
         else
@@ -93,6 +102,34 @@ struct boss_vancleefAI : public ScriptedAI
         }
 
         DoMeleeAttackIfReady();
+    }
+
+    void SpellHitTarget(Unit* target, const SpellEntry* spell)
+    {
+        // Trigger bomb AoE on the ground
+        if (target && spell && spell->Id == SPELL_CANNON_FIRE)
+        {
+            if (DoCastSpellIfCan(target, SPELL_ENGULFING_FLAMES, CF_TRIGGERED) == CAST_OK)
+            {
+                if (m_creature->getThreatManager().getThreat(target))
+                    m_creature->getThreatManager().modifyThreatPercent(target, -100);
+            }
+        }
+    }
+
+    std::vector<Unit*> GetNearbyTargets(Unit *target, float radius)
+    {
+        std::vector<Unit*> units;
+
+        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* pTarget = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (pTarget && pTarget->GetDistance(target) <= radius)
+                units.push_back(pTarget);
+        }
+
+        return units;
     }
 
     void summonAllies(int which)
