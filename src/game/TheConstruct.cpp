@@ -386,6 +386,9 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                 case 23970: // liquid fire
                     newSpell->EffectBasePoints[0] = 2000;
                     break;
+                case 19712: // arcane explosion
+                    newSpell->EffectBasePoints[0] = 1500;
+                    break;
             }
         case 79336: // vancleef
             switch (newSpell->Id) {
