@@ -88,6 +88,8 @@ void AddSC_boss_mr_smite();
 /* The Construct*/
 void AddSC_boss_cookie();
 void AddSC_boss_gilnid();
+void AddSC_boss_greenskin();
+void AddSC_boss_johnson();
 void AddSC_boss_rhahkzor();
 void AddSC_boss_sneeds_shredder();
 void AddSC_boss_sneed();
@@ -366,6 +368,8 @@ void AddScripts()
     /* The Construct*/
     AddSC_boss_cookie();
     AddSC_boss_gilnid();
+    AddSC_boss_greenskin();
+    AddSC_boss_johnson();
     AddSC_boss_rhahkzor();
     AddSC_boss_sneeds_shredder();
     AddSC_boss_sneed();

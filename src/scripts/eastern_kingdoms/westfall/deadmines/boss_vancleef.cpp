@@ -60,7 +60,7 @@ struct boss_vancleefAI : public ScriptedAI
             Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
             if (pTarget)
             {
-                std::vector<Unit*> nearbyTargets = GetNearbyTargets(pTarget, 8.0f);
+                std::vector<Unit*> nearbyTargets = GetNearbyTargets(pTarget, 4.0f);
                 if (DoCastSpellIfCan(pTarget, SPELL_CANNON_FIRE) == CAST_OK)
                 {
                     for (Unit *nearbyTarget : nearbyTargets)

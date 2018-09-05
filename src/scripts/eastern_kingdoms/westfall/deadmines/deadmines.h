@@ -28,9 +28,11 @@ enum
     GO_DMF_CHEST            = 180024,
     NPC_MR_SMITE            = 646,
     NPC_PIRATE              = 657,
-    NPC_SNEED		    = 643,
+    NPC_SNEED               = 643,
     NPC_RHAHKZOR            = 644,
     NPC_GILDNID             = 1763,
+    NPC_GREENSKIN           = 647,
+    NPC_JOHNSON             = 3586,
 
     QUEST_FORTUNE_AWAITS    = 7938
 };

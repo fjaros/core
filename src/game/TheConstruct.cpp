@@ -360,7 +360,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 5000;
                     break;
                 case 24408: //charge
-                    newSpell->EffectBasePoints[1] = 2000;
+                    newSpell->EffectBasePoints[1] = 1600;
                     break;
             }
             break;
@@ -384,7 +384,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 500;
                     break;
                 case 23970: // liquid fire
-                    newSpell->EffectBasePoints[0] = 1350;
+                    newSpell->EffectBasePoints[0] = 2000;
                     break;
             }
         case 79336: // vancleef

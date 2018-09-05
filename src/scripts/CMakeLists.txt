@@ -201,6 +201,8 @@ set (SCRIPTS_SRCS
 	eastern_kingdoms/westfall/westfall.cpp
         eastern_kingdoms/westfall/deadmines/boss_cookie.cpp
         eastern_kingdoms/westfall/deadmines/boss_gilnid.cpp
+        eastern_kingdoms/westfall/deadmines/boss_greenskin.cpp
+        eastern_kingdoms/westfall/deadmines/boss_johnson.cpp
 	eastern_kingdoms/westfall/deadmines/boss_mr_smite.cpp
         eastern_kingdoms/westfall/deadmines/boss_rhahkzor.cpp
         eastern_kingdoms/westfall/deadmines/boss_sneed.cpp
