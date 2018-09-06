@@ -70,13 +70,9 @@ struct boss_gilnidAI : public ScriptedAI
                     }
                     break;
                 case 2:
-                    ThreatList const& tList = m_creature->getThreatManager().getThreatList();
-                    for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
-                    {
-                        Unit* attacker = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-                        if (urand(1, 100) <= 50)
-                            DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_ARCANEEXPLOSION), true);
-                    }
+                    std::vector<Unit*> attackers = GetMeleeAndRanged();
+                    for (Unit *attacker : attackers)
+                        DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_ARCANEEXPLOSION), true);
                     break;
             }
             m_Aoe_Timer = urand(8000, 12000);
@@ -87,7 +83,7 @@ struct boss_gilnidAI : public ScriptedAI
         if (phase == 2)
             if (m_Infernal_Timer < diff)
             {
-                std::vector<Unit*> attackers = RandomPlayers(50.0f);
+                std::vector<Unit*> attackers = RandomPlayers(40.0f);
                 for (Unit* attacker : attackers)
                 {
                     m_creature->SummonCreature(14668,
@@ -102,6 +98,48 @@ struct boss_gilnidAI : public ScriptedAI
                 m_Infernal_Timer -= diff;
         
         DoMeleeAttackIfReady();
+    }
+
+    std::vector<Unit*> GetMeleeAndRanged()
+    {
+        bool hasMelee = false;
+        bool hasRanged = false;
+        std::vector<Unit*> allPlayers;
+        std::vector<Unit*> randomPlayers;
+
+        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+            allPlayers.push_back(m_creature->GetMap()->GetUnit((*i)->getUnitGuid()));
+
+        if (allPlayers.empty())
+            return randomPlayers;
+
+        std::random_shuffle(allPlayers.begin(), allPlayers.end());
+
+        for (Unit* player : allPlayers)
+        {
+            if (hasMelee && hasRanged)
+                break;
+
+            if (player->IsCaster())
+            {
+                if (!hasRanged)
+                {
+                    randomPlayers.push_back(player);
+                    hasRanged = true;
+                }
+            }
+            else
+            {
+                if (!hasMelee)
+                {
+                    randomPlayers.push_back(player);
+                    hasMelee = true;
+                }
+            }
+        }
+
+        return randomPlayers;
     }
 
     std::vector<Unit*> RandomPlayers(float percentage)

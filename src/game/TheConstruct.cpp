@@ -360,7 +360,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 5000;
                     break;
                 case 24408: //charge
-                    newSpell->EffectBasePoints[1] = 1600;
+                    newSpell->EffectBasePoints[1] = 1400;
                     break;
             }
             break;
@@ -384,16 +384,13 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 500;
                     break;
                 case 23970: // liquid fire
-                    newSpell->EffectBasePoints[0] = 2000;
-                    break;
-                case 19712: // arcane explosion
-                    newSpell->EffectBasePoints[0] = 1500;
+                    newSpell->EffectBasePoints[0] = 1400;
                     break;
             }
         case 79336: // vancleef
             switch (newSpell->Id) {
                 case 17501: // cannon fire
-                    newSpell->EffectBasePoints[0] = 1500;
+                    newSpell->EffectBasePoints[0] = 1400;
                     break;
             }
             break;
