@@ -24,7 +24,7 @@ UPDATE creature_template SET minlevel=61,maxlevel=62,minhealth=17534,maxhealth=1
 
 
 -- Rhahk'Zor
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=224539,maxhealth=224539,armor=4391,mindmg=5000,maxdmg=5400,baseattacktime=2000,rangeattacktime=2000,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_rhahkzor',MechanicImmuneMask=608908883,flags_extra=256 WHERE entry=644;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=224539,maxhealth=224539,armor=4391,mindmg=5000,maxdmg=5400,baseattacktime=2000,rangeattacktime=2000,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_rhahkzor',MechanicImmuneMask=2793635679,flags_extra=256 WHERE entry=644;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES
     (-2000001, '$N is making me ANGRY!', 1),
     (-2000006, 'Me likey you like Toad', 0)
@@ -43,17 +43,17 @@ UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=20700,maxhealth=2
 UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=19700,maxhealth=20900,armor=5414,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=3947;
 
 -- Sneed's Shredder
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2400,maxdmg=3200,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder',MechanicImmuneMask=608925267 WHERE entry=642;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2400,maxdmg=3200,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder',MechanicImmuneMask=2793635679 WHERE entry=642;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
 
 -- Sneed
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=608908883,flags_extra=256 WHERE entry=643;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=2793635679,flags_extra=256 WHERE entry=643;
 
 -- Remote-Controlled Golem
 UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=5404,armor=1200,mindmg=3600,maxdmg=3600,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=2520;
 
 -- Gilnid
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=2400,maxdmg=3000,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid',MechanicImmuneMask=608908883 WHERE entry=1763;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=2400,maxdmg=3000,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid',MechanicImmuneMask=2793635679 WHERE entry=1763;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000007, 'These intruders are quite resistant. Perhaps we can change things up a bit!', 1);
 UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=5213;
 
@@ -70,14 +70,14 @@ UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=28750,maxhealth=2
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=295995,maxhealth=295995,armor=4934,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_mr_smite',MechanicImmuneMask=608908883,flags_extra=256 WHERE entry=646;
 
 -- Cookie
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=310345,maxhealth=310345,armor=4513,mindmg=2000,maxdmg=3000,baseattacktime=1250,rangeattacktime=1250,dmg_multiplier=1,speed_walk=1.4,speed_run=1.84286,MovementType=1,AIName='',ScriptName='boss_cookie',MechanicImmuneMask=608908883 WHERE entry=645;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=310345,maxhealth=310345,armor=4513,mindmg=2000,maxdmg=3000,baseattacktime=1250,rangeattacktime=1250,dmg_multiplier=1,speed_walk=1.4,speed_run=1.84286,MovementType=1,AIName='',ScriptName='boss_cookie',MechanicImmuneMask=2793635679 WHERE entry=645;
 UPDATE spell_template SET baseLevel=63,spellLevel=63 WHERE ID=6306;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000003, 'No intruder will steal the Cookie!', 1);
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000004, 'Intruder eliminated. The Cookie is safe.', 1);
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000005, 'The Cookie... is... devoured.', 1);
 
 -- Edwin VanCleef
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=316594,maxhealth=316594,armor=4633,mindmg=3000,maxdmg=3500,baseattacktime=1550,rangeattacktime=1550,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_vancleef',MechanicImmuneMask=608908883 WHERE entry=639;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=316594,maxhealth=316594,armor=4633,mindmg=3000,maxdmg=3500,baseattacktime=1550,rangeattacktime=1550,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_vancleef',MechanicImmuneMask=2793635679 WHERE entry=639;
 
 -- Update greenskin
 UPDATE `creature_template` SET `minlevel` = '63', `maxlevel` = '63', `minhealth` = '271135', `maxhealth` = '271135', `minmana` = '10000', `maxmana` = '10000', `armor` = '4000', `mindmg` = '1500', `maxdmg` = '2500', `attackpower` = '600', `rangeattacktime` = '1500', `minrangedmg` = '1000', `maxrangedmg` = '1500', `rangedattackpower` = '500', `spell2` = '0', `spells_template` = '0', `ScriptName` = 'boss_greenskin',MechanicImmuneMask=608908883 WHERE `entry` = '647';
