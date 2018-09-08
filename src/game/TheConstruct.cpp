@@ -360,7 +360,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
                     newSpell->EffectBasePoints[0] = 5000;
                     break;
                 case 24408: //charge
-                    newSpell->EffectBasePoints[1] = 1400;
+                    newSpell->EffectBasePoints[1] = 375;
                     break;
             }
             break;
@@ -374,7 +374,7 @@ const SpellEntry* ChangeSpellEffect(const SpellEntry* pSpell, Unit* pCaster)
         case 79344: // cookie
             switch (newSpell->Id) {
                 case 6306: //acid splash
-                    newSpell->EffectBasePoints[0] = 1800;
+                    newSpell->EffectBasePoints[0] = 1600;
                     break;
             }
             break;

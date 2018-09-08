@@ -84,7 +84,7 @@ struct boss_rhahkzorAI : public ScriptedAI
             {
                 if (Player* pPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
                 {
-                    if (DoCastSpellIfCan(pPlayer, SPELL_CHARGE) == CAST_OK)
+                    if (DoCastSpellIfCan(pPlayer, SPELL_CHARGE, CF_FORCE_CAST) == CAST_OK)
                     {
                         if (m_alreadyCharged.find(pPlayer->GetGUID()) != m_alreadyCharged.end())
                         {
@@ -93,7 +93,7 @@ struct boss_rhahkzorAI : public ScriptedAI
                         }
                         else
                             m_alreadyCharged.insert(pPlayer->GetGUID());
-                        m_uiSayCharge_Timer = urand(16000, 19000);
+                        m_uiSayCharge_Timer = urand(14000, 18000);
                         m_uiCharge_Timer = m_uiSayCharge_Timer + 3000;
                         m_chargeTarget = 0;
 

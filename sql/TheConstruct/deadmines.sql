@@ -31,26 +31,26 @@ REPLACE INTO custom_texts (entry, content_default, `type`) VALUES
 ;
 
 -- Goblin Woodcarver
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=21000,armor=4514,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=641;
+UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=19700,maxhealth=21000,armor=4514,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=641;
 
 -- Goblin Engineer
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=19700,maxhealth=22000,armor=4614,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=622;
+UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=19700,maxhealth=22000,armor=4614,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=622;
 
 -- Goblin Craftsman
-UPDATE creature_template SET minlevel=57,maxlevel=59,minhealth=20700,maxhealth=20900,armor=4414,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1731;
+UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=20700,maxhealth=20900,armor=4414,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=1731;
 
 -- Goblin Shipbuilder
-UPDATE creature_template SET minlevel=59,maxlevel=60,minhealth=19700,maxhealth=20900,armor=5414,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=3947;
+UPDATE creature_template SET minlevel=59,maxlevel=63,minhealth=19700,maxhealth=20900,armor=5414,mindmg=2400,maxdmg=3000,minrangedmg=1600,maxrangedmg=2400,baseattacktime=1200,rangeattacktime=1200,dmg_multiplier=1 WHERE entry=3947;
 
 -- Sneed's Shredder
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=281977,armor=5100,mindmg=2400,maxdmg=3200,baseattacktime=1500,rangeattacktime=1500,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneeds_shredder',MechanicImmuneMask=608925267 WHERE entry=642;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
 
 -- Sneed
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=608908883 WHERE entry=643;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=608908883,flags_extra=256 WHERE entry=643;
 
 -- Remote-Controlled Golem
-UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=5404,armor=1200,mindmg=3500,maxdmg=3500,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=2520;
+UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=5404,armor=1200,mindmg=3600,maxdmg=3600,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=2520;
 
 -- Gilnid
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=292001,maxhealth=292001,armor=4734,mindmg=2400,maxdmg=3000,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_gilnid',MechanicImmuneMask=608908883 WHERE entry=1763;
@@ -67,7 +67,7 @@ UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=29740,maxhealth=3
 UPDATE creature_template SET minlevel=58,maxlevel=59,minhealth=28750,maxhealth=29222,armor=3420,mindmg=2400,maxdmg=3100,minrangedmg=1600,maxrangedmg=2300,baseattacktime=1400,rangeattacktime=1400,dmg_multiplier=1 WHERE entry=1732;
 
 -- Mr. Smite
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=295995,maxhealth=295995,armor=4934,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_mr_smite',MechanicImmuneMask=608908883 WHERE entry=646;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=295995,maxhealth=295995,armor=4934,dmg_multiplier=19,MovementType=1,AIName='',ScriptName='boss_mr_smite',MechanicImmuneMask=608908883,flags_extra=256 WHERE entry=646;
 
 -- Cookie
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=310345,maxhealth=310345,armor=4513,mindmg=2000,maxdmg=3000,baseattacktime=1250,rangeattacktime=1250,dmg_multiplier=1,speed_walk=1.4,speed_run=1.84286,MovementType=1,AIName='',ScriptName='boss_cookie',MechanicImmuneMask=608908883 WHERE entry=645;

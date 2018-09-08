@@ -68,14 +68,15 @@ struct boss_gilnidAI : public ScriptedAI
                                 DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_THROW_LIQUID_FIRE), true);
                         }
                     }
+                    m_Aoe_Timer = urand(8000, 12000);
                     break;
                 case 2:
                     std::vector<Unit*> attackers = GetMeleeAndRanged();
                     for (Unit *attacker : attackers)
                         DoCastSpell(attacker, sSpellMgr.GetSpellEntry(SPELL_ARCANEEXPLOSION), true);
+                    m_Aoe_Timer = urand(7000, 10000);
                     break;
             }
-            m_Aoe_Timer = urand(8000, 12000);
         }
         else
             m_Aoe_Timer -= diff;
