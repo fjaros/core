@@ -48,6 +48,7 @@ REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TE
 
 -- Sneed
 UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=2793635679,flags_extra=256 WHERE entry=643;
+REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000008, 'Weaklings! Time to go repair my shredder.', 0);
 
 -- Remote-Controlled Golem
 UPDATE creature_template SET minlevel=58,maxlevel=58,minhealth=5404,maxhealth=5404,armor=1200,mindmg=3600,maxdmg=3600,baseattacktime=1000,rangeattacktime=1000,dmg_multiplier=1 WHERE entry=2520;

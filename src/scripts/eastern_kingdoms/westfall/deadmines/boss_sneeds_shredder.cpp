@@ -41,40 +41,38 @@ struct boss_sneeds_shredderAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->getVictim())
             return;
-
+        
         if (m_Living_Bomb_Timer < diff)
         {
             Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER);
             if (pTarget && DoCastSpellIfCan(pTarget, SPELL_LIVING_BOMB) == CAST_OK)
-            {
                 m_Living_Bomb_Timer = 9000;
-            }
         }
         else
             m_Living_Bomb_Timer -= diff;
         
         if (m_isTerminating)
         {
-            if (m_Terminating_Timer < diff)	// if terminate timer runs out, stop terminating
+            if (m_Terminating_Timer < diff)
             {
+                m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, m_base_Attack_Timer);
                 m_Terminating_Timer = 10000;
                 m_isTerminating = false;
-                m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, m_base_Attack_Timer);
             }
             else
                 m_Terminating_Timer -= diff;	// otherwise decrease the timer
         }
-        else	// currently terminating, engage the recharge and set make sure his attack speed is normalized
+        else
         {
-            m_Recharging_Timer -= diff;
-        }
-        
-        if (m_Recharging_Timer < diff)	//recharged, lets terminate
-        {
-            DoScriptText(SAY_TERMINATING, m_creature);
-            m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 300);
-            m_isTerminating = true;
-            m_Recharging_Timer = 12000;
+            if (m_Recharging_Timer < diff)	//recharged, lets terminate
+            {
+                DoScriptText(SAY_TERMINATING, m_creature);
+                m_creature->SetFloatValue(UNIT_FIELD_BASEATTACKTIME + BASE_ATTACK, 300);
+                m_Recharging_Timer = 12000;
+                m_isTerminating = true;
+            }
+            else
+                m_Recharging_Timer -= diff;
         }
 
         if (m_Pierce_Timer < diff)

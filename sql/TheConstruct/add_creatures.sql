@@ -55,7 +55,7 @@ INSERT INTO `creature` (
 ;
 
 /* Training dummy */
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=20000,maxhealth=20000,armor=0,`type`=0,RegenHealth=1,ScriptName='custom_npc_training_dummy' WHERE entry=1921;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=20000,maxhealth=20000,armor=0,`type`=0,RegenHealth=1,MechanicImmuneMask=8388624,ScriptName='custom_npc_training_dummy' WHERE entry=1921;
 
 /* Delete quests from Kennel Master */
 UPDATE creature_template SET npcflag=5 WHERE entry=3362;

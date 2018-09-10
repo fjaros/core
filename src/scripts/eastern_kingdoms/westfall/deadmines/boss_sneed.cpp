@@ -7,6 +7,7 @@
 
 enum eSpells
 {
+    SAY_END_COMBAT = -2000008,
     SPELL_MC_ARUGAL = 7621,                //    Arugal's Curse
     SPELL_MC_INSANITY = 24327,             //    Cause Insanity
     SPELL_MC_DOMINATE = 20740,             //    Dominate Mind
@@ -29,12 +30,25 @@ struct boss_sneedAI : public ScriptedAI
     }
 
     void Reset() override
-    {
+    {  
         m_Events.Reset();
         m_Events.ScheduleEvent(eEvents::EVENT_MC_ARUGAL, Seconds(10));
         m_Events.ScheduleEvent(eEvents::EVENT_MC_INSANITY, Seconds(10));
         m_Events.ScheduleEvent(eEvents::EVENT_MC_DOMINATE, Seconds(10));
         m_Events.ScheduleEvent(eEvents::EVENT_CURSE_LUCIFRON, Seconds(15));
+    }
+    
+    void EnterEvadeMode() override
+    {
+        ScriptedAI::EnterEvadeMode();
+        
+        Creature *shredder = m_creature->FindNearCreature(79223, 1000.0f);
+        if (shredder->isDead())
+        {
+            DoScriptText(SAY_END_COMBAT, m_creature);
+            shredder->Respawn();
+            m_creature->DespawnOrUnsummon();
+        }
     }
 
     void UpdateAI(const uint32 p_Diff) override
