@@ -1,4 +1,24 @@
 
+-- add vancleef teleporter
+REPLACE INTO creature_template VALUES (1000017,0,0,0,2029,0,0,0,'Edwin VanCleef','Deadmines Connoisseur',0,21,21,4138,4138,0,0,852,35,35,1,1,1.14286,0,1,89,116,0,94,1,2000,2000,1,33536,0,0,0,0,0,0,29.6792,40.8089,100,7,8,639,639,0,0,0,0,0,0,0,3417,0,0,0,6390,0,318,421,'',0,3,0,0,1,286,0,0,608908883,0,0,'npc_vancleef_gossip');
+
+REPLACE INTO broadcast_text (ID,MaleText,FemaleText) VALUES
+(200001, 
+'I have an unusual request of sorts. In my old home, the mines of Westfall where I grew old and tired, the endless intimate engagements with my captains no longer exciting the erogenous crevices that once when massaged made me...',
+'I have an unusual request of sorts. In my old home, the mines of Westfall where I grew old and tired, the endless intimate engagements with my captains no longer exciting the erogenous crevices that once when massaged made me...'),
+(200002,
+'Nevertheless! I started to experiment with dark magic to rekindle the exhausted flame. Alas I managed to spawn a doppelgänger, so strong and powerful that he was soon the preferred object of my captains\' deepest fantasies.',
+'Nevertheless! I started to experiment with dark magic to rekindle the exhausted flame. Alas I managed to spawn a doppelgänger, so strong and powerful that he was soon the preferred object of my captains\' deepest fantasies.'),
+(200003,
+'My begging and pleading proved no match to the filthy powers he spread inside of my captains. I had no choice but to, alike a weathered cuckold, retreat across the world and ask you for assistance. Will you restore my dungeon to its former glory?',
+'My begging and pleading proved no match to the filthy powers he spread inside of my captains. I had no choice but to, alike a weathered cuckold, retreat across the world and ask you for assistance. Will you restore my dungeon to its former glory?');
+
+REPLACE INTO npc_text (ID,BroadcastTextID0,Probability0) VALUES
+(16777214, 200001, 1),
+(16777213, 200002, 1),
+(16777212, 200003, 1);
+
+
 UPDATE map_template SET maxplayers=15,LevelMin=60,LevelMax=60 WHERE entry=36 AND patch=1;
 
 -- Defias Miner
@@ -47,7 +67,7 @@ UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=281977,maxhealth=
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000002, 'TERMINATING... TERMINATING...', 1);
 
 -- Sneed
-UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=2793635679,flags_extra=256 WHERE entry=643;
+UPDATE creature_template SET minlevel=63,maxlevel=63,minhealth=149318,maxhealth=149318,armor=4100,mindmg=2700,maxdmg=3200,baseattacktime=1600,rangeattacktime=1600,dmg_multiplier=1,MovementType=1,AIName='',ScriptName='boss_sneed',MechanicImmuneMask=2793635679,flags_extra=0 WHERE entry=643;
 REPLACE INTO custom_texts (entry, content_default, `type`) VALUES (-2000008, 'Weaklings! Time to go repair my shredder.', 0);
 
 -- Remote-Controlled Golem

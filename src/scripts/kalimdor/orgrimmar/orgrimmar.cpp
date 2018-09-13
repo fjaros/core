@@ -863,6 +863,38 @@ CreatureAI* GetAI_boss_vol_jin(Creature* pCreature)
     return new boss_vol_jinAI(pCreature);
 }
 
+bool GossipHello_npc_vancleef_gossip(Player* pPlayer, Creature* pCreature)
+{
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Are you sure you wish to devulge further?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(16777214, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_vancleef_gossip(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    switch (uiAction)
+    {
+        case GOSSIP_ACTION_INFO_DEF + 1:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Did you have any chance to repair the damage?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(16777213, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 2:
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Just teleport me to the Deadmines...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->SEND_GOSSIP_MENU(16777212, pCreature->GetGUID());
+            break;
+        case GOSSIP_ACTION_INFO_DEF + 3:
+            pPlayer->CLOSE_GOSSIP_MENU();
+            if (pPlayer->TeleportTo(0, -11208.4f, 1672.36f, 24.6631f, 1.50124f))
+                if (!pPlayer->isAlive())
+                {
+                    pPlayer->ResurrectPlayer(0.5f, false);
+                    pPlayer->SpawnCorpseBones();
+                }
+            break;
+    }
+    return true;
+}
 
 void AddSC_orgrimmar()
 {
@@ -903,5 +935,12 @@ void AddSC_orgrimmar()
     newscript->Name = "npc_overlord_saurfang";
     newscript->GetAI = &GetAI_npc_overlord_saurfang;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_overlord_saurfang;
+    newscript->RegisterSelf();
+    
+    // The Construct
+    newscript = new Script;
+    newscript->Name = "npc_vancleef_gossip";
+    newscript->pGossipHello = &GossipHello_npc_vancleef_gossip;
+    newscript->pGossipSelect = &GossipSelect_npc_vancleef_gossip;
     newscript->RegisterSelf();
 }
