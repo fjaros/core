@@ -1731,7 +1731,7 @@ bool ChatHandler::HandleNpcCopyCommand(char* args)
 
     WorldDatabase.CommitTransactionDirect();
 
-    sObjectMgr.LoadCreatureTemplates();
+    //sObjectMgr.LoadCreatureTemplates();
     if (subname)
         PSendSysMessage("NPC copy of %s made with ID %u and name %s <%s>.", originalName.c_str(), newId, name, subname);
     else
