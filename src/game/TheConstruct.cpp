@@ -307,9 +307,9 @@ void InsertHomebind(Player *player) {
     insert.addUInt32(player->GetGUIDLow());
     insert.addUInt32(1);
     insert.addUInt32(1637);
-    insert.addFloat(1633.27);
-    insert.addFloat(-4439.64);
-    insert.addFloat(15.4805);
+    insert.addFloat(1633.27f);
+    insert.addFloat(-4439.64f);
+    insert.addFloat(15.4805f);
 
     insert.Execute();
 }

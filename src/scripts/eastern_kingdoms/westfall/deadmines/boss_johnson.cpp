@@ -1,3 +1,7 @@
+/*
+*  Script rewritten by Cabbage for The Construct
+*/
+
 #include "scriptPCH.h"
 #include "deadmines.h"
 
@@ -30,7 +34,7 @@ struct boss_johnsonAI : public ScriptedAI
         m_Events.ScheduleEvent(eEvents::EVENT_CONSUMING_SHADOWS, Seconds(2));
         m_Events.ScheduleEvent(eEvents::EVENT_MARK_OF_KAZZAK, Seconds(urand (10, 20)));
         m_Events.ScheduleEvent(eEvents::EVENT_SHADOWBOLT_VOLLEY, Seconds(urand(10, 20)));
-        m_Events.ScheduleEvent(eEvents::EVENT_SHADOWWORD_PAIN, Seconds(urand(10, 20)));
+        m_Events.ScheduleEvent(eEvents::EVENT_SHADOWWORD_PAIN, Seconds(10));
     }
 
     void UpdateAI(const uint32 p_Diff) override
@@ -65,12 +69,11 @@ struct boss_johnsonAI : public ScriptedAI
             }
             case eEvents::EVENT_SHADOWWORD_PAIN:
             {
-                for (int i = 0; i < 4; i++)
-                {
-                    auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-                    DoCastSpellIfCan(l_Target, eSpells::SPELL_SHADOWWORD_PAIN, CF_AURA_NOT_PRESENT + CF_TRIGGERED);
-                }
-                m_Events.Repeat(Seconds(urand(10, 20)));
+                std::vector<Unit*> targets = GetPlayersToSwPain();
+                for (Unit *target : targets)
+                    DoCastSpellIfCan(target, eSpells::SPELL_SHADOWWORD_PAIN, CF_TRIGGERED);
+                
+                m_Events.Repeat(Seconds(10));
                 break;
             }
                 default:
@@ -80,6 +83,28 @@ struct boss_johnsonAI : public ScriptedAI
 
         DoMeleeAttackIfReady();
     }
+    
+    std::vector<Unit*> GetPlayersToSwPain()
+    {
+        std::vector<Unit*> players;
+
+        ThreatList const& tList = m_creature->getThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* target = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (!target->HasAura(SPELL_SHADOWWORD_PAIN))
+                players.push_back(target);
+        }
+
+        if (players.empty())
+            return players;
+
+        std::random_shuffle(players.begin(), players.end());
+        int end = std::max(4, (int)players.size());
+        std::vector<Unit*> ret(players.begin(), players.begin() + end);
+        return ret;
+    }
+
 private:
     EventMap m_Events;
 };

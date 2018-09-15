@@ -62,42 +62,34 @@ struct boss_sneedAI : public ScriptedAI
             switch (l_EventId)
             {
                 case eEvents::EVENT_MC_ARUGAL:
-                {
-                    if (auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     {
+                        auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                         DoCastSpellIfCan(l_Target, eSpells::SPELL_MC_ARUGAL, CF_TRIGGERED);
                         m_Events.Repeat(Seconds(10));
+                        break;
                     }
-                    break;
-                }
                 case eEvents::EVENT_MC_INSANITY:
-                {
-                    if (auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0))
                     {
+                        auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0);
                         DoCastSpellIfCan(l_Target, eSpells::SPELL_MC_INSANITY, CF_TRIGGERED);
                         m_Events.Repeat(Seconds(10));
+                        break;
                     }
-                    break;
-                }
                 case eEvents::EVENT_MC_DOMINATE:
-                {
-                    if (auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0))
                     {
+                        auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
                         DoCastSpellIfCan(l_Target, eSpells::SPELL_MC_DOMINATE, CF_TRIGGERED);
                         m_Events.Repeat(Seconds(10));
+                        break;
                     }
-                    break;
-                }
                 case eEvents::EVENT_CURSE_LUCIFRON:
-                {
-                    if (DoCastSpellIfCan(m_creature, eSpells::SPELL_CURSE_LUCIFRON, CF_TRIGGERED) == CAST_OK)
+                    {
+                        DoCastSpellIfCan(m_creature, eSpells::SPELL_CURSE_LUCIFRON, CF_TRIGGERED);
                         m_Events.Repeat(Seconds(15));
-                    else
-                        m_Events.Repeat(Milliseconds(100));
-                    break;
-                }
-                default:
-                    break;
+                        break;
+                    }
+            default:
+                break;
             }
         }
 

@@ -1,9 +1,13 @@
+/*
+*  Script rewritten by Cabbage for The Construct
+*/
+
 #include "scriptPCH.h"
 #include "deadmines.h"
 
 enum eSpells
 {
-    SPELL_HEAL = 25807,
+    SPELL_HEAL = 24208,
     SPELL_BLOODLUST = 24185,
     SPELL_POISON_VOLLEY = 24099,
     SPELL_MUTATING_INJECTION = 28169,
@@ -29,11 +33,11 @@ struct boss_greenskinAI : public ScriptedAI
     void Reset() override
     {
         m_Events.Reset();
-        m_Events.ScheduleEvent(eEvents::EVENT_HEAL, Seconds(8));
+        m_Events.ScheduleEvent(eEvents::EVENT_HEAL, Seconds(6));
         m_Events.ScheduleEvent(eEvents::EVENT_BLOODLUST, Seconds(urand(10, 20)));
         m_Events.ScheduleEvent(eEvents::EVENT_POISON_VOLLEY, Seconds(urand(10, 15)));
-        m_Events.ScheduleEvent(eEvents::EVENT_MUTATING_INJECTION, Seconds(urand(5, 10)));
-        m_Events.ScheduleEvent(eEvents::EVENT_GRASPING_VINES, (Seconds(10)));
+        m_Events.ScheduleEvent(eEvents::EVENT_MUTATING_INJECTION, Seconds(15));
+        m_Events.ScheduleEvent(eEvents::EVENT_GRASPING_VINES, (Seconds(15)));
     }
 
     void UpdateAI(const uint32 p_Diff) override
@@ -48,8 +52,8 @@ struct boss_greenskinAI : public ScriptedAI
             {
             case eEvents::EVENT_HEAL:
             {
-                DoCastSpellIfCan(m_creature, eSpells::SPELL_HEAL, CF_FORCE_CAST);
-                m_Events.Repeat(Seconds(8));
+                DoCastSpellIfCan(m_creature, eSpells::SPELL_HEAL);
+                m_Events.Repeat(Seconds(6));
                 break;
             }
             case eEvents::EVENT_BLOODLUST:
@@ -61,21 +65,21 @@ struct boss_greenskinAI : public ScriptedAI
             case eEvents::EVENT_POISON_VOLLEY:
             {
                 auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-                DoCastSpellIfCan(l_Target, eSpells::SPELL_POISON_VOLLEY, CF_TRIGGERED);
+                DoCastSpellIfCan(l_Target, eSpells::SPELL_POISON_VOLLEY);
                 m_Events.Repeat(Seconds(urand(10, 15)));
                 break;
             }
             case eEvents::EVENT_MUTATING_INJECTION:
             {
                 auto l_Target = me->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0);
-                DoCastSpellIfCan(l_Target, eSpells::SPELL_MUTATING_INJECTION, CF_TRIGGERED + CF_FORCE_CAST);
-                m_Events.Repeat(Seconds(urand(5, 10)));
+                DoCastSpellIfCan(l_Target, eSpells::SPELL_MUTATING_INJECTION, CF_FORCE_CAST);
+                m_Events.Repeat(Seconds(15));
                 break;
             }
             case eEvents::EVENT_GRASPING_VINES:
             {
-                DoCastSpellIfCan(m_creature, eSpells::SPELL_GRASPING_VINES, CF_TRIGGERED + CF_FORCE_CAST);
-                m_Events.Repeat(Seconds(10));
+                DoCastSpellIfCan(m_creature, eSpells::SPELL_GRASPING_VINES);
+                m_Events.Repeat(Seconds(15));
                 break;
             }
                 default:
