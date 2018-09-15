@@ -100,7 +100,7 @@ struct boss_johnsonAI : public ScriptedAI
             return players;
 
         std::random_shuffle(players.begin(), players.end());
-        int end = std::max(4, (int)players.size());
+        int end = std::min(4, (int)players.size());
         std::vector<Unit*> ret(players.begin(), players.begin() + end);
         return ret;
     }
