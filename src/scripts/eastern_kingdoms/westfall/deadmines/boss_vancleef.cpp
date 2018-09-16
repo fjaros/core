@@ -125,7 +125,7 @@ struct boss_vancleefAI : public ScriptedAI
         for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
         {
             Unit* pTarget = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-            if (pTarget && pTarget->GetDistance(target) <= radius)
+            if (pTarget && pTarget != target && pTarget->GetDistance(target) <= radius)
                 units.push_back(pTarget);
         }
 
