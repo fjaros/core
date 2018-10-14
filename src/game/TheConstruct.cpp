@@ -119,7 +119,8 @@ void DoAtLogin(Player *player) {
 	    armors = {SKILL_LEATHER, SKILL_CLOTH};
 	    spells = {
 		SWORD, MACE, DAGGER, FIST, BOW, CROSSBOW, GUN, THROWN,
-		CLOTH, LEATHER
+		CLOTH, LEATHER,
+                2842 // Poisons
 	    };
 	    break;
 	case CLASS_SHAMAN:
