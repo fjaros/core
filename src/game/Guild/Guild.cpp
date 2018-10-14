@@ -956,9 +956,11 @@ void Guild::RemoveInactiveMembers(uint32 inactiveTime)
     uint64 current_time = uint64(time(NULL));
     std::vector<ObjectGuid> membersToDelete;
 
+    int lowestRank = m_Ranks.size() - 1;
+
     for(MemberList::iterator itr = members.begin(); itr != members.end(); ++itr)
     {
-        if (current_time - itr->second.LogoutTime >= inactiveTime)
+        if ((itr->second.RankId == lowestRank) && (current_time - itr->second.LogoutTime >= inactiveTime))
         {
             membersToDelete.push_back(itr->second.guid);
             sLog.outError("%s has not logged in in 7 days, deleting him from guild!", itr->second.guid.GetString().c_str());
