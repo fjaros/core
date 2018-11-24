@@ -2272,10 +2272,13 @@ bool Creature::CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction /
 
 bool Creature::CanInitiateAttack()
 {
+    // The Construct - other servers usually have a db-wide flag. We won't bother
+    bool isIgnoreCombatFlagCreature = GetEntry() == 16419 /* Ghost of Naxxramas */;
+
     if (hasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED))
         return false;
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE))
+    if (!isIgnoreCombatFlagCreature && HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE))
         return false;
 
     if (isPassiveToHostile())
