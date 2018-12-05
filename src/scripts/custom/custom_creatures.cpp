@@ -967,7 +967,7 @@ struct npc_training_dummyAI : ScriptedAI
 
     void Reset() override
     {
-        m_uiCombatTimer = 15000;
+        m_uiCombatTimer = 1000;
         attackers.clear();
     }
 
@@ -980,14 +980,20 @@ struct npc_training_dummyAI : ScriptedAI
 
     void AddAttackerToList(Unit* pWho)
     {
-        auto itr = attackers.find(pWho);
+        Unit* attacker;
+        if (pWho->IsPlayer())
+            attacker = pWho;
+        else
+            attacker = pWho->GetOwner();
+
+        auto itr = attackers.find(attacker);
         if (itr != attackers.end())
         {
             itr->second = std::time(nullptr);
         }
         else
         {
-            attackers.emplace(pWho, std::time(nullptr));
+            attackers.emplace(attacker, std::time(nullptr));
         }
     }
 
@@ -995,13 +1001,13 @@ struct npc_training_dummyAI : ScriptedAI
     {
         if (pWho)
             AddAttackerToList(pWho);
-        
+
         /* The Construct */
-        // Heal to full if damage causes health drop below 10%
+        // Heal to full if damage causes health drop below 5%
         float healthRatioAfterDamage = 
             ((float)m_creature->GetHealth() - uiDamage) / m_creature->GetMaxHealth();
-        
-        if (healthRatioAfterDamage < 0.1f) {
+
+        if (healthRatioAfterDamage < 0.05f) {
             m_creature->ModifyHealth(m_creature->GetMaxHealth());
         }
     }
@@ -1014,35 +1020,33 @@ struct npc_training_dummyAI : ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        if (m_creature->isInCombat())
+        if (!m_creature->isInCombat())
+            return;
+
+        if (m_uiCombatTimer < diff)
         {
-            if (m_uiCombatTimer <= diff)
+            for (auto itr = attackers.begin(); itr != attackers.end();)
             {
-                for (auto itr = attackers.begin(); itr != attackers.end();)
+                if (!itr->first || !itr->first->IsInWorld())
                 {
-                    if (!itr->first || !itr->first->IsInWorld())
-                    {
-                        itr = attackers.erase(itr);
-                        continue;
-                    }
-                    if (itr->second + 10 < std::time(nullptr))
-                    {
-                        m_creature->_removeAttacker(itr->first);
-                        m_creature->getThreatManager().modifyThreatPercent(itr->first, -101.0f);
-                        itr = attackers.erase(itr);
-                        continue;
-                    }
-                    ++itr;
+                    itr = attackers.erase(itr);
                 }
-
-                if (m_creature->getThreatManager().isThreatListEmpty())
-                    EnterEvadeMode();
-
-                m_uiCombatTimer = 10000;
+                else if (std::time(nullptr) - itr->second >= 10)
+                {
+                    itr->first->CombatStopWithPets(true);
+                    itr = attackers.erase(itr);
+                }
+                else
+                    ++itr;
             }
-            else
-                m_uiCombatTimer -= diff;
+
+            if (attackers.empty())
+                EnterEvadeMode();
+
+            m_uiCombatTimer = 1000;
         }
+        else
+            m_uiCombatTimer -= diff;
     }
 };
 
