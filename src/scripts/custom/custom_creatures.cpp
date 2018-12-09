@@ -989,6 +989,7 @@ struct npc_training_dummyAI : ScriptedAI
         auto itr = attackers.find(attacker);
         if (itr != attackers.end())
         {
+            attacker->SetInCombatWith(m_creature);
             itr->second = std::time(nullptr);
         }
         else
@@ -1033,7 +1034,7 @@ struct npc_training_dummyAI : ScriptedAI
                 }
                 else if (std::time(nullptr) - itr->second >= 10)
                 {
-                    itr->first->CombatStopWithPets(true);
+                    m_creature->getThreatManager().modifyThreatPercent(itr->first, -101);
                     itr = attackers.erase(itr);
                 }
                 else
