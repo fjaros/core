@@ -1196,7 +1196,7 @@ bool ChatHandler::isAvailable(ChatCommand const& cmd) const
     if (sWorld.getConfig(CONFIG_BOOL_IS_PTR))
     {
         // ptr commands
-        std::string ptr_commands[] = {"additem", "lookup item"};
+        std::string ptr_commands[] = {"additem", "lookup item", "god", "tele"};
         for (std::string allowed_cmd : ptr_commands)
         {
             if (!allowed_cmd.compare(cmd.FullName))

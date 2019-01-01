@@ -7518,6 +7518,7 @@ void Unit::SetInCombatState(bool PvP, Unit* enemy)
 void Unit::ClearInCombat()
 {
     m_CombatTimer = 0;
+    m_combatDummyCounter = 0;
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT);
 
     // Player's state will be cleared in Player::UpdateContestedPvP

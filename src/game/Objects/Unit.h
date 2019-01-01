@@ -1947,6 +1947,8 @@ class MANGOS_DLL_SPEC Unit : public WorldObject
         float getNativeScale() const;
         void setNativeScale(float scale);
 
+        uint32 m_combatDummyCounter;
+
     protected:
         explicit Unit ();
 
