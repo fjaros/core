@@ -1196,10 +1196,10 @@ bool ChatHandler::isAvailable(ChatCommand const& cmd) const
     if (sWorld.getConfig(CONFIG_BOOL_IS_PTR))
     {
         // ptr commands
-        std::string ptr_commands[] = {"additem", "lookup item", "god", "tele"};
+        std::string ptr_commands[] = {"additem", "lookup", "god", "tele", "go", "goname"};
         for (std::string allowed_cmd : ptr_commands)
         {
-            if (!allowed_cmd.compare(cmd.FullName))
+            if (!cmd.FullName.compare(0, allowed_cmd.length(), allowed_cmd))
                 return true;
         }   
     }

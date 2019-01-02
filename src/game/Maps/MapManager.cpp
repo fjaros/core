@@ -186,7 +186,7 @@ bool MapManager::CanPlayerEnter(uint32 mapid, Player* player)
         if (entry->IsRaid())
         {
             // GMs can avoid raid limitations
-            if (!player->isGameMaster() && !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_RAID))
+            if (!player->isGameMaster() && !sWorld.getConfig(CONFIG_BOOL_INSTANCE_IGNORE_RAID) && !sWorld.getConfig(CONFIG_BOOL_IS_PTR))
             {
                 // can only enter in a raid group
                 Group* group = player->GetGroup();
